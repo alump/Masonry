@@ -1,0 +1,28 @@
+@import "../reindeer/reindeer.scss";
+
+$gray: #d1d1cf;
+$green: #40b527;
+$darkgreen: darken($green, 30%);
+
+.demo {
+  @include reindeer;
+
+  .add-space-after {
+    margin-bottom: 10px;
+  }
+
+  .add-space-before {
+    margin-top: 10px;
+  }
+
+  .demo-link {
+    width: 100%;
+    text-align: right;
+    padding-left: 10px;
+    box-sizing: border-box;
+  }
+
+  .demo-masonry {
+    min-height: 100%;
+  }
+}

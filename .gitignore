@@ -1,0 +1,6 @@
+.DS_Store
+.idea/
+*.iml
+masonry-addon/target/
+masonry-demo/target/
+masonry-demo/src/main/webapp/VAADIN/widgetsets/
