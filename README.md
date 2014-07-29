@@ -51,6 +51,9 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.1.1
+- Of course one mistake leaked in (styles were broken)
+
 ### Version 0.1.0
 - First release
 - Includes initial DnD reorder implementation
