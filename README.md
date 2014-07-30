@@ -2,6 +2,8 @@
 
 Masonry is a cascading grid layout add-on for Vaadin 7.
 
+[![Build Status](http://siika.fi:8888/jenkins/job/Masonry%20(Vaadin)/badge/icon)](http://siika.fi:8888/jenkins/job/Masonry%20(Vaadin)/)
+
 ## Online demo
 
 Try the add-on demo at http://siika.fi:8080/MasonryDemo
