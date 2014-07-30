@@ -133,6 +133,7 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
 
     public DnDMasonryLayout() {
         super(new MasonryLayout());
+        addStyleName("dnd-masonry-layout");
 
         // Simplifies the drag hints
         getMasonryLayout().addStyleName("no-vertical-drag-hints");
@@ -142,7 +143,23 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
         getMasonryLayout().setWidth("100%");
 
         // No drop handler used in this version
-        this.setDragStartMode(DragStartMode.NONE);
+        setDragStartMode(DragStartMode.NONE);
+        //setDropHandler(new DndMasonryDropHandler(this));
+    }
+
+    public DnDMasonryLayout(int columnWidth) {
+        super(new MasonryLayout(columnWidth));
+        addStyleName("dnd-masonry-layout");
+
+        // Simplifies the drag hints
+        getMasonryLayout().addStyleName("no-vertical-drag-hints");
+        getMasonryLayout().addStyleName("no-horizontal-drag-hints");
+
+        // Make sure layout takes full width
+        getMasonryLayout().setWidth("100%");
+
+        // No drop handler used in this version
+        setDragStartMode(DragStartMode.NONE);
         //setDropHandler(new DndMasonryDropHandler(this));
     }
 
@@ -158,8 +175,8 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * Add component to layout. Will wrap component with DragAndDropWrapper.
      * @param component Component added
      */
-    public void addComponent(Component component) {
-        addComponent(component, getMasonryLayout().getComponentCount());
+    public void addComponentToLayout(Component component) {
+        addComponentToLayout(component, getMasonryLayout().getComponentCount());
     }
 
     /**
@@ -167,8 +184,8 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * @param component Component added
      * @param index Index where component is added
      */
-    public void addComponent(Component component, int index) {
-        addComponent(component, null, index);
+    public void addComponentToLayout(Component component, int index) {
+        addComponentToLayout(component, null, index);
     }
 
     /**
@@ -176,8 +193,8 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * @param component Component added
      * @param wrapperStyleName Style name added to wrapper (eq. use to define it take double width)
      */
-    public void addComponent(Component component, String wrapperStyleName) {
-        addComponent(component, wrapperStyleName, getMasonryLayout().getComponentCount());
+    public void addComponentToLayout(Component component, String wrapperStyleName) {
+        addComponentToLayout(component, wrapperStyleName, getMasonryLayout().getComponentCount());
     }
 
     /**
@@ -187,7 +204,7 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * @param wrapperStyleName Style name added to wrapper (eq. use to define it take double width)
      * @param index Index where component is added
      */
-    public void addComponent(Component component, String wrapperStyleName, int index) {
+    public void addComponentToLayout(Component component, String wrapperStyleName, int index) {
         getMasonryLayout().addComponent(createComponentDnDWrapper(component), wrapperStyleName, index);
     }
 
@@ -195,8 +212,11 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * Remove component from layout
      * @param component Component remvoed
      */
-    public void removeComponent(Component component) {
-        getMasonryLayout().removeComponent(getComponentDnDWrapper(component));
+    public void removeComponentInLayout(Component component) {
+        DragAndDropWrapper wrapper = getComponentDnDWrapper(component);
+        if(wrapper != null) {
+            getMasonryLayout().removeComponent(wrapper);
+        }
     }
 
     /**
@@ -204,7 +224,7 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * @param oldComponent Old component replaced
      * @param newComponent New component used as replacement
      */
-    public void replaceComponent(Component oldComponent, Component newComponent) {
+    public void replaceComponentInLayout(Component oldComponent, Component newComponent) {
         DragAndDropWrapper oldWrapper = getComponentDnDWrapper(oldComponent);
         if(oldWrapper == null) {
             throw new IllegalArgumentException("Given component not found");
@@ -248,8 +268,7 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
     /**
      * Get DragAndDropWrapper for given component
      * @param component Component added to this DndMasonryLayout
-     * @return Wrapper of component or null if not set yet
-     * @throws  java.lang.IllegalArgumentException If given component does not match with requirements
+     * @return Wrapper of component or null if not set yet, or if component is not under this layout
      */
     protected DragAndDropWrapper getComponentDnDWrapper(Component component) {
         if(!(component.getParent() instanceof DragAndDropWrapper)) {
@@ -257,7 +276,7 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
         }
         DragAndDropWrapper wrapper = (DragAndDropWrapper)component.getParent();
         if(wrapper.getParent() != this) {
-            throw new IllegalArgumentException("Given component not inside this DndMasonryLayout");
+            return null;
         }
         return wrapper;
     }
@@ -272,11 +291,12 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
     }
 
     /**
-     * Get component at given index
-     * @param index
-     * @return
+     * Get component in layout with given index. When you index components with this, use
+     * {@link #getComponentCountInLayout()} as indexing limit.
+     * @param index Index of component searched
+     * @return Component at given index
      */
-    public Component getComponent(int index) {
+    public Component getComponentInLayout(int index) {
         DragAndDropWrapper wrapper = (DragAndDropWrapper)getMasonryLayout().getComponent(index);
         if(wrapper != null) {
             return wrapper.iterator().next();
@@ -286,13 +306,21 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
     }
 
     /**
+     * Use this number when you want to know how many components have been added to layout.
+     * @return Number of components in layout
+     */
+    public int getComponentCountInLayout() {
+        return getMasonryLayout().getComponentCount();
+    }
+
+    /**
      * Add component to layout with given wrapper style name to given index. Will wrap component with
      * DragAndDropWrapper.
      * @param component Component added
      * @param wrapperStyleName Style name added to wrapper (eq. use to define it take double width)
      */
     public void addComponentFirst(Component component, String wrapperStyleName) {
-        addComponent(component, wrapperStyleName, 0);
+        addComponentToLayout(component, wrapperStyleName, 0);
     }
 
     /**
@@ -321,6 +349,13 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
     }
 
     /**
+     * Remove all components from layout
+     */
+    public void removeAllComponentsFromLayout() {
+        getMasonryLayout().removeAllComponents();
+    }
+
+    /**
      * Add reorder listener that will be called when user has reordered components
      * @param listener Listener added
      */
@@ -346,5 +381,13 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
         for(DnDMasonryReorderListener listener : reorderListeners) {
             listener.onUserReorder(event);
         }
+    }
+
+    /**
+     * Get column width used with this masonry layout
+     * @return Column width in pixels
+     */
+    public int getColumnWidth() {
+        return getMasonryLayout().getColumnWidth();
     }
 }

@@ -54,6 +54,11 @@
     background-color: #FFFFFF;
 }
 
+.v-ddwrapper.dnd-masonry-layout {
+    padding: 0px;
+    border-radius: 0px;
+}
+
 .v-overlay-container > .masonry-dnd-wrapper > * {
 
 }

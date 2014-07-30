@@ -20,6 +20,7 @@ package org.vaadin.alump.masonry.client;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
 import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ConnectorHierarchyChangeEvent;
 import com.vaadin.client.Util;
@@ -150,12 +151,58 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector {
         // ignore for now
     }
 
+    @Override
+    public void onUnregister() {
+        relayoutTimer.cancel();
+        super.onUnregister();
+    }
+
+    /**
+     * Schedule layout call(s) to widget
+     */
     protected void scheduleLayout() {
+        relayoutTimer.cancel();
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
                 getWidget().layout();
+                relayoutTimer.schedule();
             }
         });
     }
+
+    //TODO: find proper fix for layouting issues, now will try 4 times in a second to make sure layouting is correct
+    //TODO: anyway timer is good to avoid massive change at the end when all is ready
+    private RelayoutTimer relayoutTimer = new RelayoutTimer();
+
+    private class RelayoutTimer extends Timer {
+
+        public final static int LOOP_TIME_MS = 250;
+
+        private int loopsLeft = 0;
+
+        public void schedule() {
+            if(loopsLeft > 0) {
+                loopsLeft += 4;
+            } else {
+                loopsLeft = 4;
+                this.schedule(LOOP_TIME_MS);
+            }
+        }
+
+        public void cancel() {
+            loopsLeft = 0;
+            super.cancel();
+        }
+
+        @Override
+        public void run() {
+            getWidget().layout();
+            if(--loopsLeft < 1) {
+                loopsLeft = 0;
+            } else {
+                this.schedule(LOOP_TIME_MS);
+            }
+        }
+    };
 }

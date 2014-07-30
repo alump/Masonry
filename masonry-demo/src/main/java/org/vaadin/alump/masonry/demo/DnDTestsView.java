@@ -54,6 +54,15 @@ public class DnDTestsView extends VerticalLayout implements View {
         });
         buttonLayout.addComponent(addItem);
 
+        Button removeAll = new Button("Remove all", new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                layout.removeAllComponentsFromLayout();
+            }
+        });
+        buttonLayout.addComponent(removeAll);
+
         Button reLayout = new Button("Layout", new Button.ClickListener() {
 
             @Override
@@ -101,7 +110,7 @@ public class DnDTestsView extends VerticalLayout implements View {
         Component itemLayout = ItemGenerator.createItem(index);
 
         // Just using data to remember the width, this to help when reordering
-        layout.addComponent(itemLayout, doubleWidth ? MasonryLayout.DOUBLE_WIDE_STYLENAME : null);
+        layout.addComponentToLayout(itemLayout, doubleWidth ? MasonryLayout.DOUBLE_WIDE_STYLENAME : null);
 
         itemsAdded.add(itemLayout);
     }

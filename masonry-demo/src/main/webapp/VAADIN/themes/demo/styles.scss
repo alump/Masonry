@@ -22,7 +22,7 @@ $darkgreen: darken($green, 30%);
     box-sizing: border-box;
   }
 
-  .demo-masonry {
+  .demo-masonry, .demo-masonry > .masonry-layout {
     min-height: 100%;
   }
 }
