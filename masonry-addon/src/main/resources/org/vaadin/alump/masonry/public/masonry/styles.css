@@ -20,8 +20,8 @@
 }
 
 .masonry-layout.masonry-paper-shadow .masonry-item > * {
-    -moz-box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.1);
     background-color: #FFFFFF;
     position: relative;
     z-index: 1;
@@ -31,6 +31,7 @@
 .masonry-layout.masonry-paper-shadow .masonry-item:after {
     position: absolute;
     width: 40%;
+    max-width: 200px;
     height: 10px;
     content: ' ';
     /* update left & bottom values if you change margins */
