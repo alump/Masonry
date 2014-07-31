@@ -2,6 +2,7 @@ package org.vaadin.alump.masonry.demo;
 
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 
 import java.util.Random;
@@ -99,5 +100,21 @@ public class ItemGenerator {
         Label label = new Label();
         label.setValue(BACON_IPSUMS[rand.nextInt(BACON_IPSUMS.length)]);
         return label;
+    }
+
+    public static Component createPostItNote() {
+        return createPostItNote("remember to buy:<br/>• milk</br>• cheese</br>• and BEER!");
+    }
+
+    public static Component createPostItNote(String message) {
+        CssLayout layout = new CssLayout();
+        layout.setWidth("100%");
+        layout.addStyleName("post-it");
+
+        Label label = new Label(message);
+        label.setContentMode(ContentMode.HTML);
+        layout.addComponent(label);
+
+        return layout;
     }
 }

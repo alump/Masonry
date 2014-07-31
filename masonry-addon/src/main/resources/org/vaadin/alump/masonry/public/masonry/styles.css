@@ -1,33 +1,82 @@
-.masonry-layout {
-    background-color: #EFEFEF;
+.masonry-layout .masonry-item {
+    position: relative;
 }
 
-.masonry-layout .masonry-item {
-    border-width: 1px;
-    margin: 10px 10px 10px 10px;
-    width: 280px;
-    border-color: #888;
-    border-style: solid;
-    border-radius: 3px;
-    box-shadow: rgba(0,0,0,0.5) 0px 0px 3px;
+.masonry-layout .masonry-item,
+.v-overlay-container > .masonry-dnd-wrapper {
+    margin: 8px 8px 8px 8px;
+    border-radius: 1px;
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     background-color: #FFFFFF;
 }
 
+.masonry-layout.masonry-paper-shadow .masonry-item {
+    background: white;
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.masonry-layout.masonry-paper-shadow .masonry-item > * {
+    -moz-box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: #FFFFFF;
+    position: relative;
+    z-index: 1;
+}
+
+.masonry-layout.masonry-paper-shadow .masonry-item:before,
+.masonry-layout.masonry-paper-shadow .masonry-item:after {
+    position: absolute;
+    width: 40%;
+    height: 10px;
+    content: ' ';
+    /* update left & bottom values if you change margins */
+    left: 2px;
+    bottom: 8px;
+    background: transparent;
+    -webkit-transform: skew(-5deg) rotate(-5deg);
+    -moz-transform: skew(-5deg) rotate(-5deg);
+    -ms-transform: skew(-5deg) rotate(-5deg);
+    -o-transform: skew(-5deg) rotate(-5deg);
+    transform: skew(-5deg) rotate(-5deg);
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.masonry-layout.masonry-paper-shadow .masonry-item:after {
+    left: auto;
+    /* update right values if you change margins */
+    right: 2px;
+    -webkit-transform: skew(5deg) rotate(5deg);
+    -moz-transform: skew(5deg) rotate(5deg);
+    -ms-transform: skew(5deg) rotate(5deg);
+    -o-transform: skew(5deg) rotate(5deg);
+    transform: skew(5deg) rotate(5deg);
+}
+
+
 .masonry-layout .masonry-item > .v-widget {
-    padding: 1rem;
+    padding: 10px;
+}
+
+.masonry-layout .masonry-item {
+    width: 284px;
 }
 
 .masonry-layout .masonry-item.masonry-double-wide {
-    width: 580px;
+    width: 584px;
 }
 
 .masonry-layout .masonry-item.masonry-triple-wide {
-    width: 880px;
+    width: 884px;
 }
 
 .masonry-layout .masonry-item.masonry-quadruple-wide {
-    width: 1180px;
+    width: 1184px;
 }
 
 .masonry-layout .masonry-item > .v-ddwrapper {
@@ -42,23 +91,23 @@
 }
 
 .v-overlay-container > .masonry-dnd-wrapper {
-    border-width: 1px;
-    margin: 10px 10px 10px 10px;
-    max-width: 280px;
-    border-color: #888;
-    border-style: solid;
-    padding: 1rem;
-    border-radius: 3px;
-    box-shadow: rgba(0,0,0,0.5) 0px 0px 3px;
-    box-sizing: border-box;
-    background-color: #FFFFFF;
+    cursor: move;
+    max-width: 284px;
+}
+
+.v-overlay-container > .masonry-dnd-wrapper.masonry-double-wide {
+    max-width: 584px;
+}
+
+.v-overlay-container > .masonry-dnd-wrapper.masonry-triple-wide {
+    max-width: 884px;
+}
+
+.v-overlay-container > .masonry-dnd-wrapper.masonry-quadruple-wide {
+    max-width: 1184px;
 }
 
 .v-ddwrapper.dnd-masonry-layout {
     padding: 0px;
     border-radius: 0px;
-}
-
-.v-overlay-container > .masonry-dnd-wrapper > * {
-
 }

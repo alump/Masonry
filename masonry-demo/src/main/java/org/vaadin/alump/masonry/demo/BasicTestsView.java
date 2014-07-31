@@ -114,12 +114,44 @@ public class BasicTestsView extends VerticalLayout implements View {
         reOrder.setDescription("Shuffles all items to new random order");
         buttonLayout.addComponent(reOrder);
 
+        CheckBox paperStyle = new CheckBox("Paper style");
+        paperStyle.setDescription("Use fancier paper styling");
+        paperStyle.setValue(true);
+        paperStyle.setImmediate(true);
+        paperStyle.addValueChangeListener(new Property.ValueChangeListener() {
+
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                boolean value = (Boolean)event.getProperty().getValue();
+                if(value) {
+                    layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
+                } else {
+                    layout.removeStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
+                }
+            }
+        });
+        buttonLayout.addComponent(paperStyle);
+
+        Button postIt = new Button("PostIt", new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                Component note = ItemGenerator.createPostItNote();
+                layout.addComponent(note);
+                itemsAdded.add(note);
+            }
+        });
+        postIt.setDescription("Add post it note styled component");
+        buttonLayout.addComponent(postIt);
+
         Panel panel = new Panel();
+        panel.addStyleName("masonry-panel");
         panel.setSizeFull();
         addComponent(panel);
         setExpandRatio(panel, 1.0f);
 
         layout = new MasonryLayout();
+        layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
         layout.addStyleName("demo-masonry");
         layout.setWidth("100%");
         panel.setContent(layout);

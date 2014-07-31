@@ -40,19 +40,25 @@ import java.util.List;
 public class MasonryLayout extends AbstractLayout implements LayoutEvents.LayoutClickNotifier {
 
     /**
-     * Use this style name as your component wrapper style name to make it take double width
+     * Wrapper style name for components added. Will tell wrapper to take double width.
      */
     public static final String DOUBLE_WIDE_STYLENAME = "masonry-double-wide";
 
     /**
-     * Use this style name as your component wrapper style name to make it take triple width
+     * Wrapper style name for components added. Will tell wrapper to take triple width.
      */
     public static final String TRIPLE_WIDE_STYLENAME = "masonry-triple-wide";
 
     /**
-     * Use this style name as your component wrapper style name to make it take quadruple width
+     * Wrapper style name for components added. Will tell wrapper to take quadruple width.
      */
     public static final String QUADRUPLE_WIDE_STYLENAME = "masonry-quadruple-wide";
+
+    /**
+     * Add this style name to MasonryLayout component to get nicer paper shadow effect. This is more complex CSS that
+     * affects to multiple layers of DOM tree component creates.
+     */
+    public static final String MASONRY_PAPER_SHADOW_STYLENAME = "masonry-paper-shadow";
 
     protected List<Component> components = new ArrayList<Component>();
 

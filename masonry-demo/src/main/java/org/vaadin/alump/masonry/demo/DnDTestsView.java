@@ -54,6 +54,15 @@ public class DnDTestsView extends VerticalLayout implements View {
         });
         buttonLayout.addComponent(addItem);
 
+        Button addDwItem = new Button("Add DW", new Button.ClickListener() {
+
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                createAndAddItem(index++, true);
+            }
+        });
+        buttonLayout.addComponent(addDwItem);
+
         Button removeAll = new Button("Remove all", new Button.ClickListener() {
 
             @Override
@@ -83,11 +92,14 @@ public class DnDTestsView extends VerticalLayout implements View {
         buttonLayout.addComponent(disallowReorder);
 
         Panel panel = new Panel();
+        panel.addStyleName("masonry-panel");
         panel.setSizeFull();
         addComponent(panel);
         setExpandRatio(panel, 1.0f);
 
         layout = new DnDMasonryLayout();
+        // Tells to use fancier shadows
+        layout.addStyleNameToLayout(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
         layout.addMasonryReorderListener(reorderListener);
         layout.addStyleName("demo-masonry");
         layout.setWidth("100%");

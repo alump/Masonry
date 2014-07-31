@@ -205,7 +205,7 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * @param index Index where component is added
      */
     public void addComponentToLayout(Component component, String wrapperStyleName, int index) {
-        getMasonryLayout().addComponent(createComponentDnDWrapper(component), wrapperStyleName, index);
+        getMasonryLayout().addComponent(createComponentDnDWrapper(component, wrapperStyleName), wrapperStyleName, index);
     }
 
     /**
@@ -229,7 +229,7 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
         if(oldWrapper == null) {
             throw new IllegalArgumentException("Given component not found");
         }
-        DragAndDropWrapper newWrapper = createComponentDnDWrapper(newComponent);
+        DragAndDropWrapper newWrapper = createComponentDnDWrapper(newComponent, null);
         getMasonryLayout().replaceComponent(oldWrapper, newWrapper);
     }
 
@@ -245,11 +245,14 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      * @param component Component wrapped
      * @return Wrapper made or found
      */
-    protected DragAndDropWrapper createComponentDnDWrapper(Component component) {
+    protected DragAndDropWrapper createComponentDnDWrapper(Component component, String wrapperStyleName) {
         DragAndDropWrapper wrapper = getComponentDnDWrapper(component);
         if(wrapper == null) {
             wrapper = new DragAndDropWrapper(component);
             wrapper.addStyleName("masonry-dnd-wrapper");
+            if(wrapperStyleName != null) {
+                wrapper.addStyleName(wrapperStyleName);
+            }
             wrapper.setDragStartMode(allowReorder ? getComponentDragStartMode() : DragStartMode.NONE);
             wrapper.setDropHandler(createDropHandlerForComponents(wrapper));
         }
@@ -282,9 +285,10 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
     }
 
     /**
-     * Get access to Masonry layout inside DnDMasonryLayout. It's good idea to use add and remove component methods
-     * via this class, and not access those methods in MasonryLayout. Unless you know what you are doing :)
-     * @return
+     * Get access to Masonry layout inside DnDMasonryLayout. This is protected to prevent messing up wrapper structure
+     * this component is trying to maintain. If you really need to access this, inherit class and call it that way. Just
+     * be warned issues might follow.
+     * @return MasonryLayout wrapped inside this DragAndDropWrapper
      */
     protected MasonryLayout getMasonryLayout() {
         return (MasonryLayout)super.getCompositionRoot();
@@ -389,5 +393,21 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
      */
     public int getColumnWidth() {
         return getMasonryLayout().getColumnWidth();
+    }
+
+    /**
+     * Adds style name to internal layout
+     * @param styleName Style name added
+     */
+    public void addStyleNameToLayout(String styleName) {
+        getMasonryLayout().addStyleName(styleName);
+    }
+
+    /**
+     * Removes style name from internal layout
+     * @param styleName Style name removed
+     */
+    public void removeStyleNameFromLayout(String styleName) {
+        getMasonryLayout().removeStyleName(styleName);
     }
 }

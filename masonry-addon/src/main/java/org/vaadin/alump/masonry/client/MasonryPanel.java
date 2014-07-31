@@ -43,6 +43,11 @@ public class MasonryPanel extends ComplexPanel {
 
     public static final String ITEM_CLASSNAME = "masonry-item";
 
+    /**
+     * Class name added while js library is performing layout
+     */
+    public static final String RENDERING_CLASSNAME = "masonry-rendering";
+
 	public MasonryPanel() {
 
         setElement(Document.get().createDivElement());
@@ -101,6 +106,7 @@ public class MasonryPanel extends ComplexPanel {
 
     public void layout() {
         if(isVisible() && isAttached()) {
+            addStyleName(RENDERING_CLASSNAME);
             nativeLayout(msnry);
         }
     }
@@ -132,10 +138,21 @@ public class MasonryPanel extends ComplexPanel {
         return obj;
     }
 
-    protected static native JavaScriptObject initializeMasonry(Element element, JavaScriptObject properties)
+    protected native JavaScriptObject initializeMasonry(Element element, JavaScriptObject properties)
     /*-{
+        var that = this;
         var msnry = new $wnd.Masonry(element, properties);
+        msnry.on('layoutComplete', function( msnryInstance, laidOutItems ) {
+            that.@org.vaadin.alump.masonry.client.MasonryPanel::onLayoutComplete()();
+        });
         return msnry;
     }-*/;
+
+    /**
+     * Called when JavaScript library has finished the layout processing and transitions
+     */
+    protected void onLayoutComplete() {
+        removeStyleName(RENDERING_CLASSNAME);
+    }
 
 }
