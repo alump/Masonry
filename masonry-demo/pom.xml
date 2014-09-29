@@ -5,7 +5,7 @@
 	<groupId>org.vaadin.alump.masonry</groupId>
 	<artifactId>masonry-demo</artifactId>
 	<packaging>war</packaging>
-	<version>0.2.1</version>
+	<version>0.3.0</version>
 	<name>Masonry Demo</name>
 
 	<properties>
@@ -37,6 +37,11 @@
 		<license>
 			<name>Apache 2</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+		<license>
+			<name>MIT</name>
+			<url>http://desandro.mit-license.org/</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>

@@ -41,7 +41,7 @@ import java.util.Set;
 // Connector lives in the client and the @Connect annotation specifies the
 // corresponding server-side component
 @Connect(MasonryLayout.class)
-public class MasonryLayoutConnector extends AbstractLayoutConnector {
+public class MasonryLayoutConnector extends AbstractLayoutConnector implements ImagesLoadedClientListener {
 
     private final MasonryLayoutClientRpc clientRpc = new MasonryLayoutClientRpc() {
         @Override
@@ -157,6 +157,11 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector {
         super.onUnregister();
     }
 
+    @Override
+    public void onImagesLoaded() {
+        getWidget().layout();
+    }
+
     /**
      * Schedule layout call(s) to widget
      */
@@ -171,21 +176,22 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector {
         });
     }
 
-    //TODO: find proper fix for layouting issues, now will try 4 times in a second to make sure layouting is correct
-    //TODO: anyway timer is good to avoid massive change at the end when all is ready
+    // As Vaadin is performing layouts with delay this timer is here to make sure layout is recalculated few times
+    // after each request
     private RelayoutTimer relayoutTimer = new RelayoutTimer();
+
 
     private class RelayoutTimer extends Timer {
 
-        public final static int LOOP_TIME_MS = 250;
+        public final static int LOOP_TIME_MS = 100;
 
         private int loopsLeft = 0;
 
         public void schedule() {
             if(loopsLeft > 0) {
-                loopsLeft += 4;
+                loopsLeft += 3;
             } else {
-                loopsLeft = 4;
+                loopsLeft = 3;
                 this.schedule(LOOP_TIME_MS);
             }
         }

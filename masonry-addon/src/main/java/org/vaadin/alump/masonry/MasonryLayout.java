@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/** Layout that uses Masonry JavaScript library to layout components
+/**
+ * Layout that uses Masonry JavaScript library to layout components
+ *
  * Masonry by David DeSandro: http://masonry.desandro.com/
  */
 @JavaScript({ "masonry.pkgd.min.js" })
@@ -311,5 +313,26 @@ public class MasonryLayout extends AbstractLayout implements LayoutEvents.Layout
     @Override
     public void removeListener(LayoutEvents.LayoutClickListener layoutClickListener) {
         removeLayoutClickListener(layoutClickListener);
+    }
+
+    /**
+     * Define if client side should automatically relayout when images are loaded. Use this when you images with
+     * undefined heights in your layouts.
+     * @param relayout if true client side will relayout automatically when images loaded
+     */
+    public void setAutomaticLayoutWhenImagesLoaded(boolean relayout) {
+        if(relayout) {
+            ImagesLoadedExtension.createExtension(this);
+        } else {
+            ImagesLoadedExtension.removeExtension(this);
+        }
+    }
+
+    /**
+     * Check if client side is hooked to relayout when images are loaded.
+     * @return true if client side will automatically relayout when images loaded.
+     */
+    public boolean isAutomaticLayoutWhenImagesLoaded() {
+        return (ImagesLoadedExtension.getExtension(this) != null);
     }
 }

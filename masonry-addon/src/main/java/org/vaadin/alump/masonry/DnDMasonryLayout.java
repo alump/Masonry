@@ -410,4 +410,21 @@ public class DnDMasonryLayout extends DragAndDropWrapper {
     public void removeStyleNameFromLayout(String styleName) {
         getMasonryLayout().removeStyleName(styleName);
     }
+
+    /**
+     * Define if client side should automatically relayout when images are loaded. Use this when you images with
+     * undefined heights in your layouts.
+     * @param relayout if true client side will relayout automatically when images loaded
+     */
+    public void setAutomaticLayoutWhenImagesLoaded(boolean relayout) {
+        getMasonryLayout().setAutomaticLayoutWhenImagesLoaded(relayout);
+    }
+
+    /**
+     * Check if client side is hooked to relayout when images are loaded.
+     * @return true if client side will automatically relayout when images loaded.
+     */
+    public boolean isAutomaticLayoutWhenImagesLoaded() {
+        return getMasonryLayout().isAutomaticLayoutWhenImagesLoaded();
+    }
 }

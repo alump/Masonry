@@ -15,7 +15,7 @@ import java.util.Random;
 /**
  * Test case for Drag'n drop reordering features
  */
-public class DnDTestsView extends VerticalLayout implements View {
+public class DnDTestsView extends AbstractTestView {
 
     public final static String VIEW_NAME = DnDTestsView.class.getSimpleName();
 
@@ -28,58 +28,39 @@ public class DnDTestsView extends VerticalLayout implements View {
     private List<Component> itemsAdded = new ArrayList<Component>();
 
     public DnDTestsView() {
+        super("MasonryLayout DnD Tests");
 
-        setSizeFull();
-
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setMargin(true);
-        buttonLayout.setSpacing(true);
-        addComponent(buttonLayout);
-
-        Button back = new Button("←", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                UI.getCurrent().getNavigator().navigateTo(MainMenuView.VIEW_NAME);
-            }
-        });
-        buttonLayout.addComponent(back);
-
-        Button addItem = new Button("Add", new Button.ClickListener() {
+        addButton("Add", "Add component", new Button.ClickListener() {
 
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 createAndAddItem(index++, false);
             }
         });
-        buttonLayout.addComponent(addItem);
 
-        Button addDwItem = new Button("Add DW", new Button.ClickListener() {
+        addButton("Add DW", "Add double width component", new Button.ClickListener() {
 
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 createAndAddItem(index++, true);
             }
         });
-        buttonLayout.addComponent(addDwItem);
 
-        Button removeAll = new Button("Remove all", new Button.ClickListener() {
+        addButton("Remove all", "Remove all components", new Button.ClickListener() {
 
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 layout.removeAllComponentsFromLayout();
             }
         });
-        buttonLayout.addComponent(removeAll);
 
-        Button reLayout = new Button("Layout", new Button.ClickListener() {
+        addButton("Layout", "Relayout client side", new Button.ClickListener() {
 
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 layout.requestLayout();
             }
         });
-        buttonLayout.addComponent(reLayout);
 
         CheckBox disallowReorder = new CheckBox("Disallow reorder");
         disallowReorder.setImmediate(true);
@@ -91,19 +72,14 @@ public class DnDTestsView extends VerticalLayout implements View {
         });
         buttonLayout.addComponent(disallowReorder);
 
-        Panel panel = new Panel();
-        panel.addStyleName("masonry-panel");
-        panel.setSizeFull();
-        addComponent(panel);
-        setExpandRatio(panel, 1.0f);
-
         layout = new DnDMasonryLayout();
         // Tells to use fancier shadows
         layout.addStyleNameToLayout(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
         layout.addMasonryReorderListener(reorderListener);
         layout.addStyleName("demo-masonry");
         layout.setWidth("100%");
-        panel.setContent(layout);
+        layout.setAutomaticLayoutWhenImagesLoaded(true);
+        setPanelContent(layout);
 
         for(int i = 0; i < 5; ++i) {
             createAndAddItem(index++, false);
@@ -125,10 +101,5 @@ public class DnDTestsView extends VerticalLayout implements View {
         layout.addComponentToLayout(itemLayout, doubleWidth ? MasonryLayout.DOUBLE_WIDE_STYLENAME : null);
 
         itemsAdded.add(itemLayout);
-    }
-
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent event) {
-        Page.getCurrent().setTitle("MasonryLayout DnD Tests");
     }
 }

@@ -22,6 +22,7 @@ package org.vaadin.alump.masonry.client;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -57,6 +58,7 @@ public class MasonryPanel extends ComplexPanel {
         if(msnry != null) {
             return;
         }
+
         msnry = initializeMasonry(getElement(), createMasonryProperties(columnWidth).getJavaScriptObject());
     }
 
@@ -104,6 +106,9 @@ public class MasonryPanel extends ComplexPanel {
         item.removeFromParent();
     }
 
+    /**
+     * Ask Masonry to layout current items.
+     */
     public void layout() {
         if(isVisible() && isAttached()) {
             addStyleName(RENDERING_CLASSNAME);

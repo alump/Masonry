@@ -44,4 +44,8 @@ $darkgreen: darken($green, 30%);
       line-height: 25px;
     }
   }
+
+  .slow-image {
+    max-width: 100%;
+  }
 }

@@ -1,5 +1,6 @@
 package org.vaadin.alump.masonry.demo;
 
+import com.vaadin.server.ClassResource;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -116,5 +117,30 @@ public class ItemGenerator {
         layout.addComponent(label);
 
         return layout;
+    }
+
+    public static Component createSlowImage(int index) {
+        VerticalLayout vl = new VerticalLayout();
+        vl.setWidth("100%");
+        vl.setSpacing(true);
+
+        // Constructs delayed url
+        String url = "http://deelay.me/";
+        // Adds delay to url, also using index to make unique url to avoid caching
+        url += (800 + (index * 10));
+        url += "/http://misc.siika.fi/niinisto_kekkonen.jpg";
+
+        Label label = new Label("This is slow image test...");
+        vl.addComponent(label);
+
+        Image image = new Image();
+        image.addStyleName("slow-image");
+        image.setSource(new ExternalResource(url));
+        vl.addComponent(image);
+
+        label = new Label("...it will take some time before this image is loaded. This is used to test relayouting.");
+        vl.addComponent(label);
+
+        return vl;
     }
 }
