@@ -53,6 +53,19 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.3.0
+- Adds imageLoaded as optional feature that will make client side to automatically re-layout when images loaded
+
+### Version 0.2.1
+- CSS fixes (eq. dragged clones of components)
+- Fancier paper style added
+- More features in demo app
+- Missing API added to DnDMasonryLayout
+
+### Version 0.2.0
+- Minor fixes (more delayed automatic layout calls on client side)
+- changes to APIs of DnDMasonryLayout component.
+
 ### Version 0.1.1
 - Of course one mistake leaked in (styles were broken)
 
@@ -82,10 +95,11 @@ Contributions are welcome, but there are no guarantees that they are accepted as
 ## License & Author
 
 Add-on (all Vaadin and GWT related code) is distributed under Apache License 2.0. For license terms, see LICENSE.txt.
-JavaScript library from David DeSandro is distributed under MIT license. See masonry.pkgd.min.js file or http://masonry.desandro.com/
+JavaScript libraries from David DeSandro aee distributed under MIT license. See masonry.pkgd.min.js and
+imagesloaded.pkgd.min.js files or http://masonry.desandro.com/ and http://imagesloaded.desandro.com/
 
 Vaadin addo-on is written by Sami Viitanen <sami.viitanen@gmail.com>
-JavaScript library is written by David DeSandro
+JavaScript libraries are written by David DeSandro
 
 # Developer Guide
 
