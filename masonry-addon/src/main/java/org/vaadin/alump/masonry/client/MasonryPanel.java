@@ -95,8 +95,9 @@ public class MasonryPanel extends ComplexPanel {
 
     /**
      * Method used to create wrapper element for new component
-     * @param styleName
-     * @return
+     * @param styleName Stylename(s) added to element
+     * @param id ID of element
+     * @return Wrapper element created
      */
     protected Element createComponentWrapper(String styleName, String id) {
         Element item = Document.get().createDivElement();

@@ -58,7 +58,7 @@ public class ImagesLoadedExtension extends AbstractExtension {
 
         /**
          * Get instance of ImagesLoadedExtension sending this event
-         * @return
+         * @return Get ImagesLoadedExtension instance
          */
         public ImagesLoadedExtension getInstance() {
             return instance;

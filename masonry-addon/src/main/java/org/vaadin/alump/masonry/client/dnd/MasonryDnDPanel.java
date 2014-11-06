@@ -74,8 +74,8 @@ public class MasonryDnDPanel extends MasonryPanel {
 
     /**
      * Resolve wrapper if of given element
-     * @param element
-     * @return
+     * @param element Element read
+     * @return ID number of element
      * @throws java.lang.IllegalArgumentException If given element is not identified as child of this widget
      */
     protected int getWrapperId(Element element) {
@@ -209,20 +209,31 @@ public class MasonryDnDPanel extends MasonryPanel {
         Map<Widget,String> idMap = new HashMap<Widget,String>();
         //TODO: stylenames?
 
+        boolean draggedSkipped = false;
         for(int i = 0; i < children.size(); ++i) {
             Widget child = children.get(i);
             Element wrapper = child.getElement().getParentElement();
             String childId = wrapper.getId();
             if(childId.equals(dragged)) {
                 // skip
+                draggedSkipped = true;
                 continue;
             } else if(wrapper == target) {
-                positionToMovedLast = i;
-                Widget draggedWidget = getChildInWrapper(dragged);
-                reOrdered.add(draggedWidget);
-                idMap.put(draggedWidget, dragged);
-                reOrdered.add(child);
-                idMap.put(child, childId);
+                if(draggedSkipped) {
+                    positionToMovedLast = i + 1;
+                    Widget draggedWidget = getChildInWrapper(dragged);
+                    reOrdered.add(child);
+                    idMap.put(child, childId);
+                    reOrdered.add(draggedWidget);
+                    idMap.put(draggedWidget, dragged);
+                } else {
+                    positionToMovedLast = i;
+                    Widget draggedWidget = getChildInWrapper(dragged);
+                    reOrdered.add(draggedWidget);
+                    idMap.put(draggedWidget, dragged);
+                    reOrdered.add(child);
+                    idMap.put(child, childId);
+                }
             } else {
                 reOrdered.add(child);
                 idMap.put(child, childId);

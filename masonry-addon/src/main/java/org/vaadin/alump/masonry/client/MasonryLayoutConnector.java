@@ -141,7 +141,7 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector implements I
     /**
      * Find from where children has to be reconstructed
      * @param children Current list of children
-     * @return
+     * @return Index of first mismatching children
      */
     protected int findFirstMismatchInChildren(List<ComponentConnector> children) {
         int lastSame = 0;
