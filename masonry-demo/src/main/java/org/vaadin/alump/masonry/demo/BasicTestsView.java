@@ -1,5 +1,6 @@
 package org.vaadin.alump.masonry.demo;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.navigator.View;
@@ -22,18 +23,17 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
     private int index = 0;
     private CheckBox slowImage;
 
-    private List<Component> itemsAdded = new ArrayList<Component>();
-
     private Random rand = new Random(0xDEADBEEF);
 
     public BasicTestsView() {
         super("MasonryLayout Basic Tests");
+        layout = createLayout();
 
         addButton("Add 1", "Adds new item", new Button.ClickListener() {
 
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                createAndAddItem(index++, false);
+                createAndAddItem(layout, index++, false);
             }
         });
 
@@ -41,7 +41,7 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
 
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                createAndAddItem(2, true);
+                createAndAddItem(layout, 2, true);
             }
         });
 
@@ -53,7 +53,7 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
                     if(i % 2 == 0 && slowImage.getValue()) {
                         createSlowImage(index++);
                     } else {
-                        createAndAddItem(index++, false);
+                        createAndAddItem(layout, index++, false);
                     }
                 }
             }
@@ -63,10 +63,9 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
 
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                if(itemsAdded.size() > 0) {
-                    int remove = rand.nextInt(itemsAdded.size());
-                    Component removed = itemsAdded.get(remove);
-                    itemsAdded.remove(removed);
+                if(layout.getComponentCount() > 0) {
+                    int remove = rand.nextInt(layout.getComponentCount());
+                    Component removed = layout.getComponent(remove);
                     layout.removeComponent(removed);
                 }
             }
@@ -77,7 +76,6 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 layout.removeAllComponents();
-                itemsAdded.clear();
             }
         });
 
@@ -94,6 +92,7 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         clickListener.setImmediate(true);
         clickListener.addValueChangeListener(clickListenerCBListener);
         buttonLayout.addComponent(clickListener);
+
 
         slowImage = new CheckBox("Slow");
         slowImage.setDescription("Adds slow images to layout to test re-layouting");
@@ -135,15 +134,19 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
             public void buttonClick(Button.ClickEvent clickEvent) {
                 Component note = ItemGenerator.createPostItNote();
                 layout.addComponent(note);
-                itemsAdded.add(note);
             }
         });
 
-        layout = new MasonryLayout();
+        buttonLayout.addComponent(createTransitionTimeComboBox());
+
+        setPanelContent(layout);
+    }
+
+    private MasonryLayout createLayout() {
+        MasonryLayout layout = new MasonryLayout();
         layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
         layout.addStyleName("demo-masonry");
         layout.setWidth("100%");
-        setPanelContent(layout);
 
         layout.setAutomaticLayoutWhenImagesLoaded(true);
 
@@ -151,9 +154,43 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         ImagesLoadedExtension.getExtension(layout).addImagesLoadedListener(this);
 
         for(index = 0; index < 5; ++index) {
-            createAndAddItem(index, false);
+            createAndAddItem(layout, index, false);
         }
 
+        return layout;
+    }
+
+    private ComboBox createTransitionTimeComboBox() {
+        ComboBox transitionTime = new ComboBox();
+        transitionTime.setWidth("120px");
+        transitionTime.setImmediate(true);
+        transitionTime.addItem("0.2s");
+        transitionTime.setItemCaption("0.2s", "Fast (0.2s)");
+        transitionTime.addItem("0.4s");
+        transitionTime.setItemCaption("0.4s", "Default (0.4s)");
+        transitionTime.addItem("0.8s");
+        transitionTime.setItemCaption("0.8s", "Slow (0.8s)");
+        transitionTime.setValue(layout.getTransitionDuration());
+        transitionTime.setNullSelectionAllowed(false);
+        transitionTime.setNewItemsAllowed(false);
+
+        transitionTime.addValueChangeListener(new Property.ValueChangeListener() {
+
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                String newVal = event.getProperty().getValue().toString();
+                if(newVal.equals(layout.getTransitionDuration())) {
+                    return;
+                }
+
+                MasonryLayout newLayout = createLayout();
+                newLayout.setTransitionDuration(newVal);
+                setPanelContent(newLayout);
+                layout = newLayout;
+            }
+        });
+
+        return transitionTime;
     }
 
     private void shuffleLayout() {
@@ -180,13 +217,11 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         }
     }
 
-    private void createAndAddItem(int index, boolean doubleWidth) {
+    private void createAndAddItem(MasonryLayout layout, int index, boolean doubleWidth) {
         Component itemLayout = ItemGenerator.createItem(index);
 
         // Just using data to remember the width, this to help when reordering
         layout.addComponent(itemLayout, doubleWidth ? MasonryLayout.DOUBLE_WIDE_STYLENAME : null);
-
-        itemsAdded.add(itemLayout);
     }
 
     private LayoutEvents.LayoutClickListener layoutClickListener = new LayoutEvents.LayoutClickListener() {
@@ -227,7 +262,6 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
     private void createSlowImage(int index) {
         Component itemLayout = ItemGenerator.createSlowImage(index);
         layout.addComponent(itemLayout);
-        itemsAdded.add(itemLayout);
     }
 
     @Override

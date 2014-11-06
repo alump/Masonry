@@ -53,6 +53,11 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.4.0
+- Renaming DnDMasonryLayout to MasonryDnDWrapper
+- Transition time can be now defined with server API
+- New nicer drag reordering with HTML5 DnD (MasonryDndLayout)
+
 ### Version 0.3.0
 - Adds imageLoaded as optional feature that will make client side to automatically re-layout when images loaded
 

@@ -1,5 +1,6 @@
 package org.vaadin.alump.masonry.demo;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
@@ -13,6 +14,7 @@ public abstract class AbstractTestView extends VerticalLayout implements View {
     protected String title;
     protected HorizontalLayout buttonLayout;
     protected Panel masonryPanel;
+    protected Navigator navigator;
 
     protected AbstractTestView(String title) {
         this.title = title;
@@ -56,6 +58,11 @@ public abstract class AbstractTestView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        this.navigator = event.getNavigator();
         Page.getCurrent().setTitle(title);
+    }
+
+    protected Navigator getNavigator() {
+        return navigator;
     }
 }

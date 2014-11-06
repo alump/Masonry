@@ -48,4 +48,13 @@ $darkgreen: darken($green, 30%);
   .slow-image {
     max-width: 100%;
   }
+
+  .demo-header-label {
+    text-align: right;
+    color: #060;
+    border-width: 0px 0px 1px 0px;
+    border-color: #060;
+    border-style: solid;
+    margin-bottom: 5px;
+  }
 }

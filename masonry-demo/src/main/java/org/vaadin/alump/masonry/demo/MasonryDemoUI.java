@@ -28,8 +28,11 @@ public class MasonryDemoUI extends UI
     protected void init(VaadinRequest request) {
         navigator = new Navigator(this, this);
 
-        navigator.addView(MainMenuView.VIEW_NAME, new MainMenuView());
-        navigator.addView(BasicTestsView.VIEW_NAME, new BasicTestsView());
-        navigator.addView(DnDTestsView.VIEW_NAME, new DnDTestsView());
+        navigator.setErrorView(NotFoundView.class);
+
+        navigator.addView(MainMenuView.VIEW_NAME, MainMenuView.class);
+        navigator.addView(BasicTestsView.VIEW_NAME, BasicTestsView.class);
+        navigator.addView(VaadinDnDTestsView.VIEW_NAME, VaadinDnDTestsView.class);
+        navigator.addView(DnDTestsView.VIEW_NAME, DnDTestsView.class);
     }
 }

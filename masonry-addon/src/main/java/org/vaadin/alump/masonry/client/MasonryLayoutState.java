@@ -15,6 +15,8 @@ public class MasonryLayoutState extends AbstractLayoutState {
 
     public int columnWidth = 300;
 
+    public String transitionDuration = "0.4s";
+
     /**
      * Addtional stylenames for items (usually related to sizing)
      */

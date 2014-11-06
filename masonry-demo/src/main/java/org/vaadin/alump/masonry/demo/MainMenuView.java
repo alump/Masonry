@@ -25,7 +25,7 @@ public class MainMenuView extends VerticalLayout implements View {
         Label label = new Label("Masonry addon adds cascading grid layout to Vaadin.");
         infoLayout.addComponent(label);
 
-        Link link = new Link("This addon is based on David DeSandro's Masonry JavaScript library (MIT license).",
+        Link link = new Link("This addon is based on David DeSandro's Masonry and imagesLoaded JavaScript libraries (MIT license).",
                 new ExternalResource("http://masonry.desandro.com/"));
         infoLayout.addComponent(link);
 
@@ -42,13 +42,21 @@ public class MainMenuView extends VerticalLayout implements View {
         });
         addComponent(basicTests);
 
-        Button dndTests = new Button("Drag and Drop Reordering Demo", new Button.ClickListener() {
+        Button dndTests = new Button("Vaadin Drag'n Drop Demo", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                UI.getCurrent().getNavigator().navigateTo(VaadinDnDTestsView.VIEW_NAME);
+            }
+        });
+        addComponent(dndTests);
+
+        Button dnd2Tests = new Button("HTML5 Drag'n Drop Demo", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 UI.getCurrent().getNavigator().navigateTo(DnDTestsView.VIEW_NAME);
             }
         });
-        addComponent(dndTests);
+        addComponent(dnd2Tests);
     }
 
     @Override

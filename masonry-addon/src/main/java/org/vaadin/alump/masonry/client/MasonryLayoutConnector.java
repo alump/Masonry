@@ -89,14 +89,15 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector implements I
         clickEventHandler.handleEventHandlerRegistration();
 
         // call always, will be ignored after first time
-        getWidget().initialize(getState().columnWidth);
+        getWidget().initialize(getState().columnWidth, getState().transitionDuration);
 
 	}
 
     @Override
     public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent event) {
 
-        getWidget().initialize(getState().columnWidth);
+        // Just to be sure widget has been initialized (will be ignored if it is)
+        getWidget().initialize(getState().columnWidth, getState().transitionDuration);
 
         for (ComponentConnector child : event.getOldChildren()) {
             if (child.getParent() != this) {
@@ -107,6 +108,10 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector implements I
             }
         }
 
+        updateWidget(true);
+    }
+
+    protected void updateWidget(boolean scheduleLayout) {
         int reconstructFrom = findFirstMismatchInChildren(getChildComponents());
 
         // Clean reordered widgets
@@ -126,7 +131,11 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector implements I
             getWidget().addItem(cc.getWidget(), getState().itemStyleNames.get(cc));
         }
 
-        scheduleLayout();
+        if(scheduleLayout) {
+            scheduleLayout();
+        } else {
+            getWidget().layout();
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ import com.vaadin.server.ExternalResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
+import org.vaadin.alump.masonry.UnDraggableImage;
 
 import java.util.Random;
 
@@ -30,8 +31,19 @@ public class ItemGenerator {
     };
 
     public static Component createItem(int index) {
+        return createItem(index, false);
+    }
+
+    public static Component createItem(int index, boolean addHeader) {
         CssLayout itemLayout = new CssLayout();
         itemLayout.setWidth("100%");
+
+        if(addHeader) {
+            Label header = new Label("Item #" + index);
+            header.addStyleName("demo-header-label");
+            header.setWidth("100%");
+            itemLayout.addComponent(header);
+        }
 
         boolean addImage = rand.nextFloat() < 0.66f;
         boolean addLabel = rand.nextFloat() < 0.66f;
@@ -91,7 +103,7 @@ public class ItemGenerator {
     }
 
     public static Image getImage() {
-        Image image = new Image();
+        Image image = new UnDraggableImage();
         image.setSource(new ThemeResource("images/img" + rand.nextInt(10) + ".jpg"));
         image.setWidth("100%");
         return image;
@@ -133,7 +145,7 @@ public class ItemGenerator {
         Label label = new Label("This is slow image test...");
         vl.addComponent(label);
 
-        Image image = new Image();
+        Image image = new UnDraggableImage();
         image.addStyleName("slow-image");
         image.setSource(new ExternalResource(url));
         vl.addComponent(image);

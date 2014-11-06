@@ -28,6 +28,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.WidgetCollection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,9 +39,9 @@ import java.util.Map;
  */
 public class MasonryPanel extends ComplexPanel {
 
-    private final Map<Element, Widget> elementMap = new HashMap<Element,Widget>();
     private boolean masonryInitialized = false;
     private JavaScriptObject msnry = null;
+    private boolean rendering = false;
 
     public static final String ITEM_CLASSNAME = "masonry-item";
 
@@ -50,16 +51,15 @@ public class MasonryPanel extends ComplexPanel {
     public static final String RENDERING_CLASSNAME = "masonry-rendering";
 
 	public MasonryPanel() {
-
         setElement(Document.get().createDivElement());
 	}
 
-    public void initialize(int columnWidth) {
+    public void initialize(int columnWidth, String transtionTime) {
         if(msnry != null) {
             return;
         }
 
-        msnry = initializeMasonry(getElement(), createMasonryProperties(columnWidth).getJavaScriptObject());
+        msnry = initializeMasonry(getElement(), createMasonryProperties(columnWidth, transtionTime).getJavaScriptObject());
     }
 
     public void setVisible(boolean visible) {
@@ -83,20 +83,43 @@ public class MasonryPanel extends ComplexPanel {
     }
 
     public void addItem(Widget widget, String styleName) {
-        Element item = Document.get().createDivElement();
-        item.addClassName(ITEM_CLASSNAME);
-        if(styleName != null) {
-            item.addClassName(styleName);
-        }
-        elementMap.put(item, widget);
+        addItem(widget, styleName, null);
+    }
+
+    protected void addItem(Widget widget, String styleName, String id) {
+        Element item = createComponentWrapper(styleName, id);
         getElement().appendChild(item);
         nativeAddItem(msnry, item);
         super.add(widget, (com.google.gwt.user.client.Element) item);
     }
 
+    /**
+     * Method used to create wrapper element for new component
+     * @param styleName
+     * @return
+     */
+    protected Element createComponentWrapper(String styleName, String id) {
+        Element item = Document.get().createDivElement();
+        item.addClassName(ITEM_CLASSNAME);
+        if(styleName != null) {
+            item.addClassName(styleName);
+        }
+        if(id != null) {
+            item.setId(id);
+        }
+        return item;
+    }
+
+    public void removeAllItems() {
+        WidgetCollection children = getChildren();
+        while(getChildren().size() > 0) {
+            Widget child = getWidget(getWidgetCount() - 1);
+            removeItem(child);
+        }
+    }
+
     public void removeItem(Widget widget) {
         Element item = widget.getElement().getParentElement();
-        elementMap.remove(item);
 
         if(widget.getParent() == this) {
             super.remove(widget);
@@ -112,6 +135,7 @@ public class MasonryPanel extends ComplexPanel {
     public void layout() {
         if(isVisible() && isAttached()) {
             addStyleName(RENDERING_CLASSNAME);
+            rendering = true;
             nativeLayout(msnry);
         }
     }
@@ -136,10 +160,11 @@ public class MasonryPanel extends ComplexPanel {
         msnry.destroy();
     }-*/;
 
-    protected static JSONObject createMasonryProperties(int columnWidth) {
+    protected static JSONObject createMasonryProperties(int columnWidth, String transitionDuration) {
         JSONObject obj = new JSONObject();
         obj.put("columnWidth", new JSONNumber(columnWidth));
         obj.put("itemSelector", new JSONString("."  + ITEM_CLASSNAME));
+        obj.put("transitionDuration", new JSONString(transitionDuration));
         return obj;
     }
 
@@ -157,7 +182,15 @@ public class MasonryPanel extends ComplexPanel {
      * Called when JavaScript library has finished the layout processing and transitions
      */
     protected void onLayoutComplete() {
+        rendering = false;
         removeStyleName(RENDERING_CLASSNAME);
     }
 
+    /**
+     * If Masonry is performing layout rendering
+     * @return true if rendering layout, false if not
+     */
+    public boolean isRendering() {
+        return rendering;
+    }
 }

@@ -62,6 +62,8 @@ public class MasonryLayout extends AbstractLayout implements LayoutEvents.Layout
      */
     public static final String MASONRY_PAPER_SHADOW_STYLENAME = "masonry-paper-shadow";
 
+    private boolean initialClientResponseSent = false;
+
     protected List<Component> components = new ArrayList<Component>();
 
     private final MasonryLayoutServerRpc serverRpc = new MasonryLayoutServerRpc() {
@@ -88,12 +90,12 @@ public class MasonryLayout extends AbstractLayout implements LayoutEvents.Layout
      */
 	public MasonryLayout(int columnWidth) {
         this();
-        getState().columnWidth = columnWidth;
+        setColumnWidth(columnWidth);
 	}
 
 	// We must override getState() to cast the state to MyComponentState
 	@Override
-	public MasonryLayoutState getState() {
+	protected MasonryLayoutState getState() {
 		return (MasonryLayoutState) super.getState();
 	}
 
@@ -141,7 +143,11 @@ public class MasonryLayout extends AbstractLayout implements LayoutEvents.Layout
                 components.add(component);
             }
         } else {
-            components.add(component);
+            if(index < components.size()) {
+                components.add(index, component);
+            } else {
+                components.add(component);
+            }
         }
 
         try {
@@ -292,6 +298,18 @@ public class MasonryLayout extends AbstractLayout implements LayoutEvents.Layout
         return getState().columnWidth;
     }
 
+    /**
+     * Set column width used in this masonry layout. Can be only set before initial client response is sent.
+     * @param columnWidth Width of column in pixels
+     * @throws java.lang.IllegalStateException If initial client response has been already sent
+     */
+    public void setColumnWidth(int columnWidth) {
+        if(initialClientResponseSent) {
+            throw new IllegalStateException("Transition time can not be changed after it has been rendered to client");
+        }
+        getState().columnWidth = columnWidth;
+    }
+
     @Override
     public void addLayoutClickListener(LayoutEvents.LayoutClickListener listener) {
         addListener(EventId.LAYOUT_CLICK_EVENT_IDENTIFIER,
@@ -334,5 +352,60 @@ public class MasonryLayout extends AbstractLayout implements LayoutEvents.Layout
      */
     public boolean isAutomaticLayoutWhenImagesLoaded() {
         return (ImagesLoadedExtension.getExtension(this) != null);
+    }
+
+    /**
+     * Get transition duration
+     * @return Duration as CSS time value (eg. "0.4s")
+     */
+    public String getTransitionDuration() {
+        return getState().transitionDuration;
+    }
+
+    /**
+     * Define transition duration. Can be only changed before component is rendered to client side.
+     * @param time Time is CSS time value format (eg. "0.4s")
+     * @throws java.lang.IllegalStateException If initial client response is already sent
+     */
+    public void setTransitionDuration(String time) {
+        if(time == null) {
+            throw new IllegalArgumentException("Time can not be null");
+        }
+        if(initialClientResponseSent) {
+            throw new IllegalStateException("Transition time can not be changed after it has been rendered to client");
+        }
+        getState().transitionDuration = time;
+    }
+
+    @Override
+    public void beforeClientResponse(boolean initial) {
+        super.beforeClientResponse(initial);
+
+        if(initial) {
+            initialClientResponseSent = true;
+        }
+    }
+
+    @Override
+    public void detach() {
+        initialClientResponseSent = false;
+        super.detach();
+    }
+
+    /**
+     * Get index of given child component
+     * @param component Child component of layout
+     * @return Index of child component, or -1 if not found
+     */
+    public int getComponentIndex(Component component) {
+        return components.indexOf(component);
+    }
+
+    /**
+     * Get child components order list
+     * @return Order list of child components
+     */
+    public List<Component> getComponents() {
+        return new ArrayList<Component>(components);
     }
 }

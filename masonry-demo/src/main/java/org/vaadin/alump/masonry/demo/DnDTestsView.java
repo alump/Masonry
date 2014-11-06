@@ -1,105 +1,70 @@
 package org.vaadin.alump.masonry.demo;
 
 import com.vaadin.data.Property;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Page;
-import com.vaadin.ui.*;
-import org.vaadin.alump.masonry.DnDMasonryLayout;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import org.vaadin.alump.masonry.MasonryDnDLayout;
+import org.vaadin.alump.masonry.MasonryDndReorderedEvent;
 import org.vaadin.alump.masonry.MasonryLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 /**
- * Test case for Drag'n drop reordering features
+ * Created by alump on 05/11/14.
  */
-public class DnDTestsView extends AbstractTestView {
+public class DnDTestsView extends AbstractTestView implements MasonryDnDLayout.MasonryDndReorderListener {
 
     public final static String VIEW_NAME = DnDTestsView.class.getSimpleName();
 
-    private DnDMasonryLayout layout;
-
-    private int index = 0;
-
-    private Random rand = new Random(0xDEADBEEF);
-
-    private List<Component> itemsAdded = new ArrayList<Component>();
+    protected MasonryDnDLayout layout;
+    protected Label messageLabel;
 
     public DnDTestsView() {
-        super("MasonryLayout DnD Tests");
+        super("HTML5 based client side reordering DnD demo");
 
-        addButton("Add", "Add component", new Button.ClickListener() {
-
+        CheckBox draggingAllowed = new CheckBox("Disable dragging");
+        draggingAllowed.setDescription("If dragging should be disabled");
+        draggingAllowed.setImmediate(true);
+        draggingAllowed.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                createAndAddItem(index++, false);
+            public void valueChange(Property.ValueChangeEvent event) {
+                boolean disabled = (Boolean)event.getProperty().getValue();
+                layout.setDraggingAllowed(!disabled);
             }
         });
+        buttonLayout.addComponent(draggingAllowed);
 
-        addButton("Add DW", "Add double width component", new Button.ClickListener() {
-
+        addButton("relayout", "force relayouting", new Button.ClickListener() {
             @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                createAndAddItem(index++, true);
-            }
-        });
-
-        addButton("Remove all", "Remove all components", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                layout.removeAllComponentsFromLayout();
-            }
-        });
-
-        addButton("Layout", "Relayout client side", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
+            public void buttonClick(Button.ClickEvent event) {
                 layout.requestLayout();
             }
         });
 
-        CheckBox disallowReorder = new CheckBox("Disallow reorder");
-        disallowReorder.setImmediate(true);
-        disallowReorder.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                layout.setReorderable(!((Boolean) event.getProperty().getValue()));
-            }
-        });
-        buttonLayout.addComponent(disallowReorder);
+        messageLabel = new Label("-");
+        messageLabel.setWidth("100%");
+        buttonLayout.addComponent(messageLabel);
+        buttonLayout.setExpandRatio(messageLabel, 1.0f);
 
-        layout = new DnDMasonryLayout();
-        // Tells to use fancier shadows
-        layout.addStyleNameToLayout(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
-        layout.addMasonryReorderListener(reorderListener);
-        layout.addStyleName("demo-masonry");
+        layout = new MasonryDnDLayout();
+        layout.addMasonryDndReorderListener(this);
+        layout.setTransitionDuration("0.2s");
         layout.setWidth("100%");
-        layout.setAutomaticLayoutWhenImagesLoaded(true);
-        setPanelContent(layout);
+        layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
+        masonryPanel.setContent(layout);
 
-        for(int i = 0; i < 5; ++i) {
-            createAndAddItem(index++, false);
+        for(int i = 0; i < 10; ++i) {
+            layout.addComponent(ItemGenerator.createItem(i, true));
         }
+
+        layout.setDraggingAllowed(true);
     }
 
-    private final DnDMasonryLayout.DnDMasonryReorderListener reorderListener = new DnDMasonryLayout.DnDMasonryReorderListener() {
 
-        @Override
-        public void onUserReorder(DnDMasonryLayout.DnDMasonryReorderEvent event) {
-            System.out.println("User reordered stuff!");
-        }
-    };
-
-    private void createAndAddItem(int index, boolean doubleWidth) {
-        Component itemLayout = ItemGenerator.createItem(index);
-
-        // Just using data to remember the width, this to help when reordering
-        layout.addComponentToLayout(itemLayout, doubleWidth ? MasonryLayout.DOUBLE_WIDE_STYLENAME : null);
-
-        itemsAdded.add(itemLayout);
+    @Override
+    public void onReordered(MasonryDndReorderedEvent event) {
+        int oldIndex = event.getOldOrder().indexOf(event.getMovedComponent());
+        int newIndex = event.getLayout().getComponentIndex(event.getMovedComponent());
+        messageLabel.setValue("Moved from " + oldIndex + " to " + newIndex);
     }
 }
