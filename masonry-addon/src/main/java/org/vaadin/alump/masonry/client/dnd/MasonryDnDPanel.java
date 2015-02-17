@@ -66,6 +66,10 @@ public class MasonryDnDPanel extends MasonryPanel {
                 wrapper.removeAttribute("draggable");
             }
         }
+
+        if(!isRendering() && isRendered()) {
+            layout();
+        }
     }
 
     protected String generateWrapperId() {
@@ -261,7 +265,7 @@ public class MasonryDnDPanel extends MasonryPanel {
         setDraggedWrapper(null);
 
         if(reOrderHandler != null) {
-            LOGGER.severe("drop #3a");
+            //LOGGER.severe("drop #3a");
             reOrderHandler.onReorder(dragged, positionToMovedLast);
         } else {
             LOGGER.warning("No reorder handler defined");

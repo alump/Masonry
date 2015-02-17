@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.1.15</vaadin.version>
+		<vaadin.version>7.3.3</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 	</properties>
 
@@ -180,6 +180,8 @@
 						<goals>
 							<goal>resources</goal>
 							<goal>update-widgetset</goal>
+							<goal>compile-theme</goal>
+							<goal>update-theme</goal>
 							<goal>compile</goal>
 						</goals>
 					</execution>
@@ -266,6 +268,8 @@
 								</configuration>
 								<goals>
 									<goal>resources</goal>
+									<goal>update-theme</goal>
+									<goal>compile-theme</goal>
 									<goal>update-widgetset</goal>
 									<goal>compile</goal>
 								</goals>
@@ -305,6 +309,8 @@
 								</configuration>
 								<goals>
 									<goal>resources</goal>
+									<goal>update-theme</goal>
+									<goal>compile-theme</goal>
 									<goal>update-widgetset</goal>
 									<goal>compile</goal>
 								</goals>

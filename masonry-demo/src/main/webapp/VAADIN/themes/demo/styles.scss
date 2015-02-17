@@ -1,4 +1,5 @@
 @import "../reindeer/reindeer.scss";
+@import "addons.scss";
 
 $gray: #d1d1cf;
 $green: #40b527;
@@ -6,6 +7,8 @@ $darkgreen: darken($green, 30%);
 
 .demo {
   @include reindeer;
+
+  @include addons;
 
   .masonry-panel > .v-panel-content {
     background-color: #DEDEDE;

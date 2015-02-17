@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.WidgetCollection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * GWT implementation of MasonryPanel. Expects that masonry JavaScript code has been loaded
@@ -42,6 +43,7 @@ public class MasonryPanel extends ComplexPanel {
     private boolean masonryInitialized = false;
     private JavaScriptObject msnry = null;
     private boolean rendering = false;
+    private boolean rendered = false;
 
     public static final String ITEM_CLASSNAME = "masonry-item";
 
@@ -49,6 +51,8 @@ public class MasonryPanel extends ComplexPanel {
      * Class name added while js library is performing layout
      */
     public static final String RENDERING_CLASSNAME = "masonry-rendering";
+
+    private final static Logger LOGGER = Logger.getLogger(MasonryPanel.class.getName());
 
 	public MasonryPanel() {
         setElement(Document.get().createDivElement());
@@ -67,8 +71,7 @@ public class MasonryPanel extends ComplexPanel {
 
         super.setVisible(visible);
 
-
-        if(wasVisible == false && visible == true) {
+        if(msnry != null && wasVisible == false && visible == true) {
             layout();
         }
     }
@@ -90,7 +93,7 @@ public class MasonryPanel extends ComplexPanel {
         Element item = createComponentWrapper(styleName, id);
         getElement().appendChild(item);
         nativeAddItem(msnry, item);
-        super.add(widget, (com.google.gwt.user.client.Element) item);
+        super.add(widget, item);
     }
 
     /**
@@ -179,11 +182,22 @@ public class MasonryPanel extends ComplexPanel {
         return msnry;
     }-*/;
 
+    public void setTransitionDuration(String duration) {
+        nativeSetTransition(msnry, duration);
+    }
+
+    protected static native void nativeSetTransition(JavaScriptObject msnry, String duration)
+    /*-{
+        msnry.transitionDuration =  duration;
+    }-*/;
+
     /**
      * Called when JavaScript library has finished the layout processing and transitions
      */
     protected void onLayoutComplete() {
+        LOGGER.fine("Layout complete");
         rendering = false;
+        rendered = true;
         removeStyleName(RENDERING_CLASSNAME);
     }
 
@@ -193,5 +207,13 @@ public class MasonryPanel extends ComplexPanel {
      */
     public boolean isRendering() {
         return rendering;
+    }
+
+    /**
+     * If Masonry has been rendered at least once
+     * @return
+     */
+    public boolean isRendered() {
+        return rendered;
     }
 }

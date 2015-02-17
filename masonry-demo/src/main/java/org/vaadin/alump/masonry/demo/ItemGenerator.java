@@ -30,6 +30,8 @@ public class ItemGenerator {
             "Frankfurter andouille pastrami bresaola. Strip steak filet mignon corned beef t-bone short loin. Tail porchetta fatback, cow ham ribeye chicken shoulder sausage kielbasa meatloaf flank tongue pancetta hamburger. Corned beef bacon pig venison brisket. Jowl kevin strip steak chuck sausage."
     };
 
+    private final static int NUMBER_OR_IMAGES = 12;
+
     public static Component createItem(int index) {
         return createItem(index, false);
     }
@@ -104,7 +106,7 @@ public class ItemGenerator {
 
     public static Image getImage() {
         Image image = new UnDraggableImage();
-        image.setSource(new ThemeResource("images/img" + rand.nextInt(10) + ".jpg"));
+        image.setSource(new ThemeResource("images/img" + rand.nextInt(NUMBER_OR_IMAGES) + ".jpg"));
         image.setWidth("100%");
         return image;
     }

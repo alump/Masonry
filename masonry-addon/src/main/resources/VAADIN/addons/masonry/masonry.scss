@@ -1,0 +1,150 @@
+@mixin masonry {
+
+  $masonry-column-width: 300px !default;
+  $masonry-column-spacing: 8px !default;
+
+  $masonry-single-width: $masonry-column-width - $masonry-column-spacing * 2 !default;
+  $masonry-double-width: $masonry-column-width * 2 - $masonry-column-spacing * 2 !default;
+  $masonry-triple-width: $masonry-column-width * 3 - $masonry-column-spacing * 2 !default;
+  $masonry-quadruple-width: $masonry-column-width * 4 - $masonry-column-spacing * 2 !default;
+
+  $masonry-bgcolor: #fff !default;
+  $masonry-padding: 10px !default;
+  $masonry-item-shadow: 0 0 5px rgba(0, 0, 0, 0.2) !default;
+
+  $masonry-paper-inshadow: inset 0 0 40px rgba(0, 0, 0, 0.1) !default;
+  $masonry-paper-cornershadow: 0 6px 12px rgba(0, 0, 0, 0.3) !default;
+  $masonry-paper-cordershadow-before-transform: skew(-5deg) rotate(-5deg) !default;
+  $masonry-paper-cordershadow-after-transform: skew(5deg) rotate(5deg) !default;
+
+  .masonry-layout {
+    .masonry-item {
+      position: relative;
+      margin: $masonry-column-spacing $masonry-column-spacing $masonry-column-spacing $masonry-column-spacing;
+      border-radius: 1px;
+      -moz-box-shadow: $masonry-item-shadow;
+      box-shadow: $masonry-item-shadow;
+      box-sizing: border-box;
+      background-color: $masonry-bgcolor;
+      width: $masonry-single-width;
+
+      &.masonry-item.masonry-double-wide {
+        width: $masonry-double-width;
+      }
+
+      &.masonry-triple-wide {
+        width: $masonry-triple-width;
+      }
+
+      &.masonry-quadruple-wide {
+        width: $masonry-quadruple-width;
+      }
+
+      > .v-widget {
+        padding: $masonry-padding;
+      }
+    }
+
+    > .v-ddwrapper {
+      padding: 1rem;
+      border-radius: 0px;
+
+      &.v-ddwrapper-over {
+        outline: none;
+        border: none;
+        background: #DDD;
+      }
+    }
+
+    &.masonry-paper-shadow {
+      .masonry-item {
+        background: white;
+        -moz-box-shadow: $masonry-item-shadow;
+        box-shadow: $masonry-item-shadow;
+        z-index: 1;
+
+        > * {
+          -moz-box-shadow: $masonry-paper-inshadow;
+          box-shadow: $masonry-paper-inshadow;
+          background-color: $masonry-bgcolor;
+          position: relative;
+          z-index: 1;
+        }
+
+        &:before,
+        &:after {
+          position: absolute;
+          width: 40%;
+          max-width: 200px;
+          height: 10px;
+          content: ' ';
+          /* update left & bottom values if you change margins */
+          bottom: 8px;
+          background: transparent;
+          -webkit-box-shadow: $masonry-paper-cornershadow;
+          -moz-box-shadow: $masonry-paper-cornershadow;
+          box-shadow: $masonry-paper-cornershadow;
+        }
+
+        &:before {
+          left: 2px;
+          right: auto;
+          -webkit-transform: $masonry-paper-cordershadow-before-transform;
+          -moz-transform: $masonry-paper-cordershadow-before-transform;
+          -ms-transform: $masonry-paper-cordershadow-before-transform;
+          -o-transform: $masonry-paper-cordershadow-before-transform;
+          transform: $masonry-paper-cordershadow-before-transform;
+        }
+
+        &:after {
+          left: auto;
+          right: 2px;
+          -webkit-transform: $masonry-paper-cordershadow-after-transform;
+          -moz-transform: $masonry-paper-cordershadow-after-transform;
+          -ms-transform: $masonry-paper-cordershadow-after-transform;
+          -o-transform: $masonry-paper-cordershadow-after-transform;
+          transform: $masonry-paper-cordershadow-after-transform;
+        }
+
+      }
+    }
+  }
+
+  &.v-overlay-container {
+    > .masonry-dnd-wrapper {
+      margin: 8px 8px 8px 8px;
+      border-radius: 1px;
+      -moz-box-shadow: $masonry-item-shadow;
+      box-shadow: $masonry-item-shadow;
+      box-sizing: border-box;
+      background-color: #FFFFFF;
+      cursor: move;
+      max-width: $masonry-single-width;
+
+      &.masonry-double-wide {
+        max-width: $masonry-double-width;
+      }
+
+      &.masonry-triple-wide {
+        max-width: $masonry-triple-width;
+      }
+
+      &.masonry-quadruple-wide {
+        max-width: $masonry-quadruple-width;
+      }
+    }
+  }
+
+  .v-ddwrapper.dnd-masonry-layout {
+    padding: 0px;
+    border-radius: 0px;
+  }
+
+  .masonry-dnd-layout {
+    .masonry-item {
+      &.masonry-dnd-dragged {
+        opacity: 0.5;
+      }
+    }
+  }
+}

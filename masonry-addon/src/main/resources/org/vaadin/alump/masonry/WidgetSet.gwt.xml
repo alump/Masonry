@@ -5,7 +5,7 @@
 	<!-- Inherit DefaultWidgetSet -->
 	<inherits name="com.vaadin.DefaultWidgetSet" /> 
 
-	<!-- Widget styles in public -directory -->
-	<stylesheet src="masonry/styles.css"/>
+	<!-- Widget styles in public -directory (moved to vaadin theming) -->
+	<!-- <stylesheet src="masonry/styles.css"/> -->
 
 </module>

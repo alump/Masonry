@@ -6,7 +6,7 @@ Masonry is a cascading grid layout add-on for Vaadin 7.
 
 ## Online demo
 
-Try the add-on demo at http://siika.fi:8080/MasonryDemo
+Try the online add-on demo at [app.siika.fi/MasonryDemo](http://app.siika.fi/MasonryDemo) or [siika.fi:8080/MasonryDemo](http://siika.fi:8080/MasonryDemo)
 
 ## Download release
 
