@@ -29,62 +29,38 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         super("MasonryLayout Basic Tests");
         layout = createLayout();
 
-        addButton("Add 1", "Adds new item", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                createAndAddItem(layout, index++, false);
-            }
+        addButton("Add 1", "Adds new item", clickEvent -> {
+            createAndAddItem(layout, index++, false);
         });
 
-        addButton("Add DW", "Adds double wide component", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                createAndAddItem(layout, 2, true);
-            }
+        addButton("Add DW", "Adds double wide component", clickEvent -> {
+            createAndAddItem(layout, 2, true);
         });
 
-        addButton("Add 5", "Adds 5 new items", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                for(int i = 0; i < 5; ++i) {
-                    if(i % 2 == 0 && slowImage.getValue()) {
-                        createSlowImage(index++);
-                    } else {
-                        createAndAddItem(layout, index++, false);
-                    }
+        addButton("Add 5", "Adds 5 new items", clickEvent -> {
+            for(int i = 0; i < 5; ++i) {
+                if(i % 2 == 0 && slowImage.getValue()) {
+                    createSlowImage(index++);
+                } else {
+                    createAndAddItem(layout, index++, false);
                 }
             }
         });
 
-        addButton("Remove", "Removes random component.", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                if(layout.getComponentCount() > 0) {
-                    int remove = rand.nextInt(layout.getComponentCount());
-                    Component removed = layout.getComponent(remove);
-                    layout.removeComponent(removed);
-                }
+        addButton("Remove", "Removes random component.", clickEvent -> {
+            if(layout.getComponentCount() > 0) {
+                int remove = rand.nextInt(layout.getComponentCount());
+                Component removed = layout.getComponent(remove);
+                layout.removeComponent(removed);
             }
         });
 
-        addButton("Clear", "Removes all components.", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                layout.removeAllComponents();
-            }
+        addButton("Clear", "Removes all components.", clickEvent -> {
+            layout.removeAllComponents();
         });
 
-        addButton("Layout", "Will ask client side to relayout. Usually used as workaround for issues.", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
+        addButton("Layout", "Will ask client side to relayout. Usually used as workaround for issues.", clickEvent -> {
                 layout.requestLayout();
-            }
         });
 
         CheckBox clickListener = new CheckBox("Close when clicked");
@@ -100,12 +76,8 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         slowImage.addValueChangeListener(slowImageCBListener);
         buttonLayout.addComponent(slowImage);
 
-        Button reOrder = new Button("Random", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                shuffleLayout();
-            }
+        Button reOrder = new Button("Random", clickEvent -> {
+            shuffleLayout();
         });
         reOrder.setDescription("Shuffles all items to new random order");
         buttonLayout.addComponent(reOrder);
@@ -114,26 +86,28 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         paperStyle.setDescription("Use fancier paper styling");
         paperStyle.setValue(true);
         paperStyle.setImmediate(true);
-        paperStyle.addValueChangeListener(new Property.ValueChangeListener() {
-
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                boolean value = (Boolean)event.getProperty().getValue();
-                if(value) {
-                    layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
-                } else {
-                    layout.removeStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
-                }
+        paperStyle.addValueChangeListener(event -> {
+            boolean value = (Boolean)event.getProperty().getValue();
+            if(value) {
+                layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
+            } else {
+                layout.removeStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
             }
         });
         buttonLayout.addComponent(paperStyle);
 
-        addButton("PostIt", "Add post it note styled component", new Button.ClickListener() {
+        addButton("PostIt", "Add post it note styled component", clickEvent -> {
+            Component note = ItemGenerator.createPostItNote();
+            layout.addComponent(note);
+        });
 
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                Component note = ItemGenerator.createPostItNote();
-                layout.addComponent(note);
+        addButton("Theme", "Toggle theme", clickEvent -> {
+            if (getUI().getTheme().equals("demo")) {
+                System.out.println("Theme toggled to demo2");
+                getUI().setTheme("demo2");
+            } else {
+                System.out.println("Theme toggled to demo");
+                getUI().setTheme("demo");
             }
         });
 

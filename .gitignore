@@ -5,3 +5,7 @@ masonry-addon/target/
 masonry-demo/target/
 masonry-demo/src/main/webapp/VAADIN/widgetsets/
 masonry-demo/src/main/webapp/VAADIN/themes/demo/styles.css
+masonry-demo/src/main/webapp/VAADIN/themes/demo2/addons.scss
+masonry-demo/src/main/webapp/VAADIN/themes/demo2/styles.css
+masonry-demo/src/main/webapp/VAADIN/themes/demo3/addons.scss
+masonry-demo/src/main/webapp/VAADIN/themes/demo3/styles.css

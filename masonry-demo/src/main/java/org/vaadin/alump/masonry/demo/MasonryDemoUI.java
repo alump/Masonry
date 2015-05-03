@@ -1,6 +1,7 @@
 package org.vaadin.alump.masonry.demo;
 
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +12,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 
-@Theme("demo")
+@Theme("demo2")
 @Title("Masonry Add-on Demo")
 @SuppressWarnings("serial")
 public class MasonryDemoUI extends UI
@@ -19,13 +20,11 @@ public class MasonryDemoUI extends UI
 
     private Navigator navigator;
 
-    @WebServlet(value = "/*", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = MasonryDemoUI.class, widgetset = "org.vaadin.alump.masonry.demo.DemoWidgetSet")
-    public static class Servlet extends VaadinServlet {
-    }
-
     @Override
     protected void init(VaadinRequest request) {
+
+        //VaadinSession.getCurrent().addRequestHandler(new ImagesRequestHandler());
+
         navigator = new Navigator(this, this);
 
         navigator.setErrorView(NotFoundView.class);

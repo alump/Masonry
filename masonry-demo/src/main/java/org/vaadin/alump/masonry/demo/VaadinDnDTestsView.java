@@ -27,45 +27,34 @@ public class VaadinDnDTestsView extends AbstractTestView {
     public VaadinDnDTestsView() {
         super("Vaadin Drag'n drop support demo");
 
-        addButton("Add", "Add component", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
+        addButton("Add", "Add component", clickEvent -> {
                 createAndAddItem(index++, false);
-            }
         });
 
-        addButton("Add DW", "Add double width component", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                createAndAddItem(index++, true);
-            }
+        addButton("Add DW", "Add double width component", clickEvent -> {
+            createAndAddItem(index++, true);
         });
 
-        addButton("Remove all", "Remove all components", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                layout.removeAllComponentsFromLayout();
-            }
+        addButton("Remove all", "Remove all components", clickEvent -> {
+            layout.removeAllComponentsFromLayout();
         });
 
-        addButton("Layout", "Relayout client side", new Button.ClickListener() {
+        addButton("Layout", "Relayout client side", clickEvent -> {
+            layout.requestLayout();
+        });
 
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                layout.requestLayout();
+        addButton("Theme", "Toggle theme", clickEvent -> {
+            if(getUI().getTheme().equals("demo2")) {
+                getUI().setTheme("demo3");
+            } else {
+                getUI().setTheme("demo2");
             }
         });
 
         CheckBox disallowReorder = new CheckBox("Disallow reorder");
         disallowReorder.setImmediate(true);
-        disallowReorder.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                layout.setReorderable(!((Boolean) event.getProperty().getValue()));
-            }
+        disallowReorder.addValueChangeListener(event -> {
+            layout.setReorderable(!((Boolean) event.getProperty().getValue()));
         });
         buttonLayout.addComponent(disallowReorder);
 

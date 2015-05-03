@@ -106,7 +106,8 @@ public class ItemGenerator {
 
     public static Image getImage() {
         Image image = new UnDraggableImage();
-        image.setSource(new ThemeResource("images/img" + rand.nextInt(NUMBER_OR_IMAGES) + ".jpg"));
+        //image.setSource(new ThemeResource("images/img" + rand.nextInt(NUMBER_OR_IMAGES) + ".jpg"));
+        image.setSource(new ExternalResource("images/img" + rand.nextInt(NUMBER_OR_IMAGES) + ".jpg"));
         image.setWidth("100%");
         return image;
     }

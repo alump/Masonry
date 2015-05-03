@@ -1,0 +1,11 @@
+@import "variables";
+@import "../valo/valo";
+@import "addons.scss";
+@import "demo2";
+
+.demo2 {
+  @include valo;
+  @include addons;
+  @include demo2;
+}
+
