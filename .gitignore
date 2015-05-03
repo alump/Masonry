@@ -4,3 +4,4 @@
 masonry-addon/target/
 masonry-demo/target/
 masonry-demo/src/main/webapp/VAADIN/widgetsets/
+masonry-demo/src/main/webapp/VAADIN/themes/demo/styles.css

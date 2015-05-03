@@ -2,21 +2,24 @@ package org.vaadin.alump.masonry;
 
 import com.vaadin.ui.Component;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Drag and drop re-ordering event
  */
-public class MasonryDndReorderedEvent {
+public class MasonryDndReorderedEvent implements Serializable {
 
-    private MasonryDnDLayout layout;
-    private Component movedComponent;
-    private List<Component> oldOrder;
+    private final MasonryDnDLayout layout;
+    private final Component movedComponent;
+    private final List<Component> oldOrder;
 
     public MasonryDndReorderedEvent(MasonryDnDLayout layout, Component movedComponent, List<Component> oldOrder) {
         this.layout = layout;
         this.movedComponent = movedComponent;
-        this.oldOrder = oldOrder;
+        this.oldOrder = Collections.unmodifiableList(new ArrayList<Component>(oldOrder));
     }
 
     /**

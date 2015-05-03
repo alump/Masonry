@@ -5,12 +5,12 @@
 	<groupId>org.vaadin.alump.masonry</groupId>
 	<artifactId>masonry-demo</artifactId>
 	<packaging>war</packaging>
-	<version>0.4.0-SNAPSHOT</version>
+	<version>0.4.0</version>
 	<name>Masonry Demo</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.3.3</vaadin.version>
+		<vaadin.version>7.3.10</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 	</properties>
 
