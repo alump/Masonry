@@ -88,9 +88,12 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector implements I
 		super.onStateChanged(stateChangeEvent);
         clickEventHandler.handleEventHandlerRegistration();
 
-        // call always, will be ignored after first time
-        getWidget().initialize(getState().columnWidth, getState().transitionDuration);
-
+        // Re-layout or initialize after state change
+        if(getWidget().isInitialized()) {
+            scheduleLayout();
+        } else {
+            getWidget().initialize(getState().columnWidth, getState().transitionDuration);
+        }
 	}
 
     @Override

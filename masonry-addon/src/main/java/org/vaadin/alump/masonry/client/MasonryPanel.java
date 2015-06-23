@@ -58,6 +58,10 @@ public class MasonryPanel extends ComplexPanel {
         setElement(Document.get().createDivElement());
 	}
 
+    public boolean isInitialized() {
+        return msnry != null;
+    }
+
     public void initialize(int columnWidth, String transtionTime) {
         if(msnry != null) {
             return;

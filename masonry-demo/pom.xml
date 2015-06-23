@@ -5,7 +5,7 @@
 	<groupId>org.vaadin.alump.masonry</groupId>
 	<artifactId>masonry-demo</artifactId>
 	<packaging>war</packaging>
-	<version>0.4.0</version>
+	<version>0.4.1</version>
 	<name>Masonry Demo</name>
 
 	<properties>
