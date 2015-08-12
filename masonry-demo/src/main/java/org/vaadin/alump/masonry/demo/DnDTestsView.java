@@ -1,10 +1,8 @@
 package org.vaadin.alump.masonry.demo;
 
 import com.vaadin.data.Property;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.*;
 import org.vaadin.alump.masonry.MasonryDnDLayout;
 import org.vaadin.alump.masonry.MasonryDndReorderedEvent;
 import org.vaadin.alump.masonry.MasonryLayout;
@@ -25,19 +23,22 @@ public class DnDTestsView extends AbstractTestView implements MasonryDnDLayout.M
         CheckBox draggingAllowed = new CheckBox("Disable dragging");
         draggingAllowed.setDescription("If dragging should be disabled");
         draggingAllowed.setImmediate(true);
-        draggingAllowed.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                boolean disabled = (Boolean)event.getProperty().getValue();
-                layout.setDraggingAllowed(!disabled);
-            }
+        draggingAllowed.addValueChangeListener(event -> {
+            boolean disabled = (Boolean) event.getProperty().getValue();
+            layout.setDraggingAllowed(!disabled);
         });
         buttonLayout.addComponent(draggingAllowed);
+        buttonLayout.setComponentAlignment(draggingAllowed, Alignment.BOTTOM_CENTER);
 
-        addButton("relayout", "force relayouting", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                layout.requestLayout();
+        addButton(FontAwesome.REFRESH, "force relayouting", event -> layout.requestLayout());
+
+        addButton(FontAwesome.CSS3, "Toggle theme", clickEvent -> {
+            if (getUI().getTheme().equals("demo")) {
+                System.out.println("Theme toggled to demo2");
+                getUI().setTheme("demo2");
+            } else {
+                System.out.println("Theme toggled to demo");
+                getUI().setTheme("demo");
             }
         });
 
