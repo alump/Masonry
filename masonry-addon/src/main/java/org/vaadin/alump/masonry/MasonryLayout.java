@@ -262,6 +262,19 @@ public class MasonryLayout extends AbstractLayout implements LayoutEvents.Layout
         return getState().itemStyleNames.get(component);
     }
 
+    /**
+     * Update component's wrappers style name.
+     * @param childComponent Child component of this MasonryLayout
+     * @param wrapperStyleName New style name of wrapper
+     * @throws IllegalArgumentException If given component is not child of this MasonryLayout
+     */
+    public void updateComponentWrapperStyleName(Component childComponent, String wrapperStyleName) {
+        if(childComponent.getParent() != this) {
+            throw new IllegalArgumentException("Given component is not child of this MasonryLayout");
+        }
+        getState().itemStyleNames.put(childComponent, wrapperStyleName);
+    }
+
     @Override
     public void removeComponent(Component component) {
 

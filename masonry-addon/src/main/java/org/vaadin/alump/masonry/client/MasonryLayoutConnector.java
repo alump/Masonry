@@ -29,12 +29,14 @@ import com.vaadin.client.ui.AbstractLayoutConnector;
 import com.google.gwt.user.client.ui.Widget;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.LayoutClickEventHandler;
+import com.vaadin.shared.Connector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.shared.ui.LayoutClickRpc;
 import org.vaadin.alump.masonry.MasonryLayout;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 // Connector binds client-side widget class to server-side component class
@@ -84,14 +86,28 @@ public class MasonryLayoutConnector extends AbstractLayoutConnector implements I
 
 	// Whenever the state changes in the server-side, this method is called
 	@Override
-	public void onStateChanged(StateChangeEvent stateChangeEvent) {
-		super.onStateChanged(stateChangeEvent);
+	public void onStateChanged(StateChangeEvent event) {
+		super.onStateChanged(event);
         clickEventHandler.handleEventHandlerRegistration();
 
         // call always, will be ignored after first time
         getWidget().initialize(getState().columnWidth, getState().transitionDuration);
 
+        // Handle wrapper style changes if not initial
+        if(!event.isInitialStateChange() && event.hasPropertyChanged("itemStyleNames")) {
+            updateWrapperStyleNames(getState().itemStyleNames);
+        }
+
 	}
+
+    protected void updateWrapperStyleNames(Map<Connector,String> itemStyleNames) {
+        for(int i = 0; i < getChildComponents().size(); ++i) {
+            ComponentConnector cc = getChildComponents().get(i);
+            String itemStyleName = itemStyleNames.get(cc);
+            getWidget().updateWrapperStyleName(cc.getWidget(), itemStyleName);
+        }
+        scheduleLayout();
+    }
 
     @Override
     public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent event) {

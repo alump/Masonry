@@ -53,6 +53,10 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
  
 ## Release notes
 
+### Version 0.5.0
+- Valo theme support
+- API to change wrapper style names (issue #10)
+
 ### Version 0.4.0
 - Renaming DnDMasonryLayout to MasonryDnDWrapper
 - Transition time can be now defined with server API

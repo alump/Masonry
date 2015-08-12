@@ -85,6 +85,16 @@ public class MasonryPanel extends ComplexPanel {
         super.onDetach();
     }
 
+    public void updateWrapperStyleName(Widget widget, String styleName) {
+        if(widget.getParent() == this) {
+            Element wrapper = widget.getElement().getParentElement();
+            wrapper.setClassName(ITEM_CLASSNAME);
+            if(styleName != null) {
+                wrapper.addClassName(styleName);
+            }
+        }
+    }
+
     public void addItem(Widget widget, String styleName) {
         addItem(widget, styleName, null);
     }

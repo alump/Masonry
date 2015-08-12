@@ -5,6 +5,7 @@ import com.vaadin.data.Property;
 import com.vaadin.event.LayoutEvents;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import org.vaadin.alump.masonry.ImagesLoadedExtension;
@@ -22,6 +23,8 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
     private MasonryLayout layout;
     private int index = 0;
     private CheckBox slowImage;
+
+    private Optional<Component> reusedComponent = Optional.empty();
 
     private Random rand = new Random(0xDEADBEEF);
 
@@ -47,61 +50,30 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
             }
         });
 
-        addButton("Remove", "Removes random component.", clickEvent -> {
-            if(layout.getComponentCount() > 0) {
+        addButton(FontAwesome.TRASH_O, "Removes random component.", clickEvent -> {
+            if (layout.getComponentCount() > 0) {
                 int remove = rand.nextInt(layout.getComponentCount());
                 Component removed = layout.getComponent(remove);
                 layout.removeComponent(removed);
             }
         });
 
-        addButton("Clear", "Removes all components.", clickEvent -> {
+        addButton(FontAwesome.ERASER, "Removes all components.", clickEvent -> {
             layout.removeAllComponents();
         });
 
-        addButton("Layout", "Will ask client side to relayout. Usually used as workaround for issues.", clickEvent -> {
-                layout.requestLayout();
+        addButton(FontAwesome.REFRESH, "Will ask client side to relayout. Usually used as workaround for issues.", clickEvent -> {
+            layout.requestLayout();
         });
 
-        CheckBox clickListener = new CheckBox("Close when clicked");
-        clickListener.setDescription("When true will close items when clicked.");
-        clickListener.setImmediate(true);
-        clickListener.addValueChangeListener(clickListenerCBListener);
-        buttonLayout.addComponent(clickListener);
+        addButton(FontAwesome.RANDOM, "Randomly reorder all children", e -> shuffleLayout());
 
-
-        slowImage = new CheckBox("Slow");
-        slowImage.setDescription("Adds slow images to layout to test re-layouting");
-        slowImage.setImmediate(true);
-        slowImage.addValueChangeListener(slowImageCBListener);
-        buttonLayout.addComponent(slowImage);
-
-        Button reOrder = new Button("Random", clickEvent -> {
-            shuffleLayout();
-        });
-        reOrder.setDescription("Shuffles all items to new random order");
-        buttonLayout.addComponent(reOrder);
-
-        CheckBox paperStyle = new CheckBox("Paper");
-        paperStyle.setDescription("Use fancier paper styling");
-        paperStyle.setValue(true);
-        paperStyle.setImmediate(true);
-        paperStyle.addValueChangeListener(event -> {
-            boolean value = (Boolean)event.getProperty().getValue();
-            if(value) {
-                layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
-            } else {
-                layout.removeStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
-            }
-        });
-        buttonLayout.addComponent(paperStyle);
-
-        addButton("PostIt", "Add post it note styled component", clickEvent -> {
+        addButton(FontAwesome.PAPERCLIP, "Add post it note styled component", clickEvent -> {
             Component note = ItemGenerator.createPostItNote();
             layout.addComponent(note);
         });
 
-        addButton("Theme", "Toggle theme", clickEvent -> {
+        addButton(FontAwesome.CSS3, "Toggle theme", clickEvent -> {
             if (getUI().getTheme().equals("demo")) {
                 System.out.println("Theme toggled to demo2");
                 getUI().setTheme("demo2");
@@ -111,7 +83,48 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
             }
         });
 
+        addButton(FontAwesome.ARROWS_H, "Toggle width of child component (first click adds)", clickEvent -> {
+            if (!reusedComponent.isPresent()) {
+                reusedComponent = Optional.of(ItemGenerator.createItem(1));
+                reusedComponent.get().addDetachListener(event -> reusedComponent = Optional.empty());
+                layout.addComponent(reusedComponent.get());
+            } else if (MasonryLayout.DOUBLE_WIDE_STYLENAME.equals(layout.getComponentWrapperStyleName(reusedComponent.get()))) {
+                layout.updateComponentWrapperStyleName(reusedComponent.get(), null);
+            } else {
+                layout.updateComponentWrapperStyleName(reusedComponent.get(), MasonryLayout.DOUBLE_WIDE_STYLENAME);
+            }
+        });
+
         buttonLayout.addComponent(createTransitionTimeComboBox());
+
+        slowImage = new CheckBox("Slow");
+        slowImage.setDescription("Adds slow images to layout to test re-layouting");
+        slowImage.setImmediate(true);
+        slowImage.addValueChangeListener(slowImageCBListener);
+        buttonLayout.addComponent(slowImage);
+        buttonLayout.setComponentAlignment(slowImage, Alignment.BOTTOM_CENTER);
+
+        CheckBox clickListener = new CheckBox("Close when clicked");
+        clickListener.setDescription("When true will close items when clicked.");
+        clickListener.setImmediate(true);
+        clickListener.addValueChangeListener(clickListenerCBListener);
+        buttonLayout.addComponent(clickListener);
+        buttonLayout.setComponentAlignment(clickListener, Alignment.BOTTOM_CENTER);
+
+        CheckBox paperStyle = new CheckBox("Paper");
+        paperStyle.setDescription("Use fancier paper styling");
+        paperStyle.setValue(true);
+        paperStyle.setImmediate(true);
+        paperStyle.addValueChangeListener(event -> {
+            boolean value = (Boolean) event.getProperty().getValue();
+            if (value) {
+                layout.addStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
+            } else {
+                layout.removeStyleName(MasonryLayout.MASONRY_PAPER_SHADOW_STYLENAME);
+            }
+        });
+        buttonLayout.addComponent(paperStyle);
+        buttonLayout.setComponentAlignment(paperStyle, Alignment.BOTTOM_CENTER);
 
         setPanelContent(layout);
     }
@@ -148,20 +161,16 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         transitionTime.setNullSelectionAllowed(false);
         transitionTime.setNewItemsAllowed(false);
 
-        transitionTime.addValueChangeListener(new Property.ValueChangeListener() {
-
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                String newVal = event.getProperty().getValue().toString();
-                if(newVal.equals(layout.getTransitionDuration())) {
-                    return;
-                }
-
-                MasonryLayout newLayout = createLayout();
-                newLayout.setTransitionDuration(newVal);
-                setPanelContent(newLayout);
-                layout = newLayout;
+        transitionTime.addValueChangeListener(event -> {
+            String newVal = event.getProperty().getValue().toString();
+            if(newVal.equals(layout.getTransitionDuration())) {
+                return;
             }
+
+            MasonryLayout newLayout = createLayout();
+            newLayout.setTransitionDuration(newVal);
+            setPanelContent(newLayout);
+            layout = newLayout;
         });
 
         return transitionTime;
@@ -198,38 +207,28 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         layout.addComponent(itemLayout, doubleWidth ? MasonryLayout.DOUBLE_WIDE_STYLENAME : null);
     }
 
-    private LayoutEvents.LayoutClickListener layoutClickListener = new LayoutEvents.LayoutClickListener() {
-
-        @Override
-        public void layoutClick(LayoutEvents.LayoutClickEvent event) {
-            Component child = event.getChildComponent();
-            if(child != null) {
-                layout.removeComponent(child);
-            } else {
-                Notification.show("Layout clicked!");
-            }
+    private LayoutEvents.LayoutClickListener layoutClickListener = event ->  {
+        Component child = event.getChildComponent();
+        if(child != null) {
+            layout.removeComponent(child);
+        } else {
+            Notification.show("Layout clicked!");
         }
     };
 
-    private Property.ValueChangeListener clickListenerCBListener = new Property.ValueChangeListener() {
-        @Override
-        public void valueChange(Property.ValueChangeEvent event) {
-            boolean value = (Boolean)event.getProperty().getValue();
-            if(value) {
-                layout.addLayoutClickListener(layoutClickListener);
-            } else {
-                layout.removeLayoutClickListener(layoutClickListener);
-            }
+    private Property.ValueChangeListener clickListenerCBListener = event -> {
+        boolean value = (Boolean)event.getProperty().getValue();
+        if(value) {
+            layout.addLayoutClickListener(layoutClickListener);
+        } else {
+            layout.removeLayoutClickListener(layoutClickListener);
         }
     };
 
-    private Property.ValueChangeListener slowImageCBListener = new Property.ValueChangeListener() {
-        @Override
-        public void valueChange(Property.ValueChangeEvent event) {
-            boolean value = (Boolean)event.getProperty().getValue();
-            if(value) {
-                createSlowImage(index++);
-            }
+    private Property.ValueChangeListener slowImageCBListener = event -> {
+        boolean value = (Boolean)event.getProperty().getValue();
+        if(value) {
+            createSlowImage(index++);
         }
     };
 
