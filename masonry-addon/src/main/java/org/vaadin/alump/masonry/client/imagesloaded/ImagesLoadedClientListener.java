@@ -1,4 +1,4 @@
-package org.vaadin.alump.masonry.client;
+package org.vaadin.alump.masonry.client.imagesloaded;
 
 /**
  * Interface for Connector classes that want to be notified on client side when their images are loaded (only applies

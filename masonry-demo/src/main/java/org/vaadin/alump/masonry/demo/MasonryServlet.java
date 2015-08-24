@@ -21,9 +21,7 @@ public class MasonryServlet extends VaadinServlet {
     @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
-        System.out.println("foo 1");
         getService().addSessionInitListener(event -> {
-            System.out.println("foo 2");
             event.getSession().addRequestHandler(imagesRequestHandler);
         });
     }

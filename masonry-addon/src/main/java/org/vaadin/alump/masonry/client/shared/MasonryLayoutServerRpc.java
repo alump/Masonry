@@ -1,4 +1,4 @@
-package org.vaadin.alump.masonry.client;
+package org.vaadin.alump.masonry.client.shared;
 
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.communication.ServerRpc;

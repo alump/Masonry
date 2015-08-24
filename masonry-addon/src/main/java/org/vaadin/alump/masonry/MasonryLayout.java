@@ -25,9 +25,9 @@ import com.vaadin.shared.EventId;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Component;
-import org.vaadin.alump.masonry.client.MasonryLayoutClientRpc;
-import org.vaadin.alump.masonry.client.MasonryLayoutServerRpc;
-import org.vaadin.alump.masonry.client.MasonryLayoutState;
+import org.vaadin.alump.masonry.client.shared.MasonryLayoutClientRpc;
+import org.vaadin.alump.masonry.client.shared.MasonryLayoutServerRpc;
+import org.vaadin.alump.masonry.client.shared.MasonryLayoutState;
 
 import java.util.ArrayList;
 import java.util.Iterator;

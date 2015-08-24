@@ -22,7 +22,6 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
 
     private MasonryLayout layout;
     private int index = 0;
-    private CheckBox slowImage;
 
     private Optional<Component> reusedComponent = Optional.empty();
 
@@ -32,25 +31,21 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         super("MasonryLayout Basic Tests");
         layout = createLayout();
 
-        addButton("Add 1", "Adds new item", clickEvent -> {
+        addButton(FontAwesome.PLUS, "1", "Adds new item", clickEvent -> {
             createAndAddItem(layout, index++, false);
         });
 
-        addButton("Add DW", "Adds double wide component", clickEvent -> {
+        addButton(FontAwesome.PLUS, "DW", "Adds double wide component", clickEvent -> {
             createAndAddItem(layout, 2, true);
         });
 
-        addButton("Add 5", "Adds 5 new items", clickEvent -> {
+        addButton(FontAwesome.PLUS, "5", "Adds 5 new items", clickEvent -> {
             for(int i = 0; i < 5; ++i) {
-                if(i % 2 == 0 && slowImage.getValue()) {
-                    createSlowImage(index++);
-                } else {
-                    createAndAddItem(layout, index++, false);
-                }
+                createAndAddItem(layout, index++, false);
             }
         });
 
-        addButton(FontAwesome.TRASH_O, "Removes random component.", clickEvent -> {
+        addButton(FontAwesome.TRASH_O, "random", "Removes random component.", clickEvent -> {
             if (layout.getComponentCount() > 0) {
                 int remove = rand.nextInt(layout.getComponentCount());
                 Component removed = layout.getComponent(remove);
@@ -97,12 +92,7 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
 
         buttonLayout.addComponent(createTransitionTimeComboBox());
 
-        slowImage = new CheckBox("Slow");
-        slowImage.setDescription("Adds slow images to layout to test re-layouting");
-        slowImage.setImmediate(true);
-        slowImage.addValueChangeListener(slowImageCBListener);
-        buttonLayout.addComponent(slowImage);
-        buttonLayout.setComponentAlignment(slowImage, Alignment.BOTTOM_CENTER);
+        addButton(FontAwesome.CLOCK_O, "Adds slow images to layout to test re-layouting", event -> createSlowImage(index++));
 
         CheckBox clickListener = new CheckBox("Close when clicked");
         clickListener.setDescription("When true will close items when clicked.");
@@ -212,7 +202,7 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         if(child != null) {
             layout.removeComponent(child);
         } else {
-            Notification.show("Layout clicked!");
+            Notification.show("Layout clicked X:" + event.getClientX() + " Y:" + event.getClientY() + "!");
         }
     };
 
@@ -225,13 +215,6 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
         }
     };
 
-    private Property.ValueChangeListener slowImageCBListener = event -> {
-        boolean value = (Boolean)event.getProperty().getValue();
-        if(value) {
-            createSlowImage(index++);
-        }
-    };
-
     private void createSlowImage(int index) {
         Component itemLayout = ItemGenerator.createSlowImage(index);
         layout.addComponent(itemLayout);
@@ -239,6 +222,6 @@ public class BasicTestsView extends AbstractTestView implements ImagesLoadedExte
 
     @Override
     public void onImagesLoaded(ImagesLoadedExtension.ImagesLoadedEvent event) {
-        System.out.println("Images loaded in Masonry!");
+        //System.out.println("Images loaded in Masonry!");
     }
 }

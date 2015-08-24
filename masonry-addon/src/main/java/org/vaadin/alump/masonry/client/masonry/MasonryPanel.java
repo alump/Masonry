@@ -17,12 +17,11 @@
  */
 
 
-package org.vaadin.alump.masonry.client;
+package org.vaadin.alump.masonry.client.masonry;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -30,8 +29,6 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.WidgetCollection;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -154,9 +151,22 @@ public class MasonryPanel extends ComplexPanel {
         }
     }
 
+    protected void layoutWithoutTransitions(JavaScriptObject[] items) {
+        nativeLayoutWithoutTransitions(msnry, items);
+    }
+
+    protected JavaScriptObject[] getItems() {
+        return nativeGetItems(msnry);
+    }
+
     protected static native  void nativeLayout(JavaScriptObject msnry)
     /*-{
         msnry.layout();
+    }-*/;
+
+    protected static native  void nativeLayoutWithoutTransitions(JavaScriptObject msnry, JavaScriptObject[] items)
+    /*-{
+        msnry.layoutItems(items, true);
     }-*/;
 
     protected static native void nativeAddItem(JavaScriptObject msnry, Element itemElement)
@@ -174,6 +184,11 @@ public class MasonryPanel extends ComplexPanel {
         msnry.destroy();
     }-*/;
 
+    protected static native JavaScriptObject[] nativeGetItems(JavaScriptObject msnry)
+    /*-{
+        return msnry.items;
+    }-*/;
+
     protected static JSONObject createMasonryProperties(int columnWidth, String transitionDuration) {
         JSONObject obj = new JSONObject();
         obj.put("columnWidth", new JSONNumber(columnWidth));
@@ -186,8 +201,9 @@ public class MasonryPanel extends ComplexPanel {
     /*-{
         var that = this;
         var msnry = new $wnd.Masonry(element, properties);
-        msnry.on('layoutComplete', function( msnryInstance, laidOutItems ) {
-            that.@org.vaadin.alump.masonry.client.MasonryPanel::onLayoutComplete()();
+        msnry.on('layoutComplete', function( event, items ) {
+            console.log('onLayoutComplete');
+            that.@org.vaadin.alump.masonry.client.masonry.MasonryPanel::onLayoutComplete()();
         });
         return msnry;
     }-*/;

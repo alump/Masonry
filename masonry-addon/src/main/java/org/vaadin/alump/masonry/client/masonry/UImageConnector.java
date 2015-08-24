@@ -1,4 +1,4 @@
-package org.vaadin.alump.masonry.client.dnd;
+package org.vaadin.alump.masonry.client.masonry;
 
 import com.vaadin.client.ui.image.ImageConnector;
 import com.vaadin.shared.ui.Connect;

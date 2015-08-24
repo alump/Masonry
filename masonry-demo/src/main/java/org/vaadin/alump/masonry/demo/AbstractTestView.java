@@ -46,7 +46,14 @@ public abstract class AbstractTestView extends VerticalLayout implements View {
     }
 
     protected void addButton(Resource icon, String description, Button.ClickListener clickListener) {
+        addButton(icon, null, description, clickListener);
+    }
+
+    protected void addButton(Resource icon, String caption, String description, Button.ClickListener clickListener) {
         Button button = new Button();
+        if(caption != null) {
+            button.setCaption(caption);
+        }
         button.addClickListener(clickListener);
         button.setIcon(icon);
         if(description != null) {

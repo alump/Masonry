@@ -33,30 +33,13 @@ public class MainMenuView extends VerticalLayout implements View {
                 new ExternalResource("https://github.com/alump/Masonry"));
         infoLayout.addComponent(link);
 
-        Button basicTests = new Button("Basic Demo", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                UI.getCurrent().getNavigator().navigateTo(BasicTestsView.VIEW_NAME);
-            }
-        });
+        Button basicTests = new Button("Basic Demo", event ->
+                UI.getCurrent().getNavigator().navigateTo(BasicTestsView.VIEW_NAME));
         addComponent(basicTests);
 
-        Button dndTests = new Button("Vaadin Drag'n Drop Demo", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                UI.getCurrent().getNavigator().navigateTo(VaadinDnDTestsView.VIEW_NAME);
-            }
-        });
+        Button dndTests = new Button("Vaadin Drag'n Drop Demo", event ->
+                UI.getCurrent().getNavigator().navigateTo(VaadinDnDTestsView.VIEW_NAME));
         addComponent(dndTests);
-
-        Button dnd2Tests = new Button("HTML5 Drag'n Drop Demo", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                UI.getCurrent().getNavigator().navigateTo(DnDTestsView.VIEW_NAME);
-            }
-        });
-        addComponent(dnd2Tests);
     }
 
     @Override

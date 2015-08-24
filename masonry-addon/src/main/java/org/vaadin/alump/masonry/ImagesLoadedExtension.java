@@ -19,13 +19,11 @@
 package org.vaadin.alump.masonry;
 
 import com.vaadin.annotations.JavaScript;
-import com.vaadin.server.AbstractClientConnector;
 import com.vaadin.server.AbstractExtension;
-import com.vaadin.server.ClientConnector;
 import com.vaadin.server.Extension;
 import com.vaadin.ui.AbstractComponent;
-import org.vaadin.alump.masonry.client.ImagesLoadedServerRpc;
-import org.vaadin.alump.masonry.client.ImagesLoadedState;
+import org.vaadin.alump.masonry.client.shared.ImagesLoadedServerRpc;
+import org.vaadin.alump.masonry.client.shared.ImagesLoadedState;
 
 import java.util.ArrayList;
 import java.util.List;

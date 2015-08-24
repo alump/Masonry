@@ -1,5 +1,5 @@
 /**
- * DnDMasonryLayout.java (Masonry)
+ * MasonryDnDWrapper.java (Masonry)
  *
  * Copyright 2014 Vaadin Ltd, Sami Viitanen <sami.viitanen@vaadin.org>
  *
@@ -31,8 +31,7 @@ import java.util.List;
 /**
  * Adds DnD reordering features to MasonryLayout. MasonryDndWrapper inherits DragAndDropWrapper,
  * how ever this default implementation does not do any drop handling. If you want to handle dropping
- * on layout itself, set the DropHandler. If all you need is reordering by dragging, see MasonryDndLayout class.
- * @see org.vaadin.alump.masonry.MasonryDnDLayout
+ * on layout itself, set the DropHandler.
  */
 public class MasonryDnDWrapper extends DragAndDropWrapper {
 
@@ -286,7 +285,7 @@ public class MasonryDnDWrapper extends DragAndDropWrapper {
     }
 
     /**
-     * Get access to Masonry layout inside DnDMasonryLayout. This is protected to prevent messing up wrapper structure
+     * Get access to Masonry layout inside MasonryDnDWrapper. This is protected to prevent messing up wrapper structure
      * this component is trying to maintain. If you really need to access this, inherit class and call it that way. Just
      * be warned issues might follow.
      * @return MasonryLayout wrapped inside this DragAndDropWrapper

@@ -23,8 +23,6 @@ public class MasonryDemoUI extends UI
     @Override
     protected void init(VaadinRequest request) {
 
-        //VaadinSession.getCurrent().addRequestHandler(new ImagesRequestHandler());
-
         navigator = new Navigator(this, this);
 
         navigator.setErrorView(NotFoundView.class);
@@ -32,6 +30,5 @@ public class MasonryDemoUI extends UI
         navigator.addView(MainMenuView.VIEW_NAME, MainMenuView.class);
         navigator.addView(BasicTestsView.VIEW_NAME, BasicTestsView.class);
         navigator.addView(VaadinDnDTestsView.VIEW_NAME, VaadinDnDTestsView.class);
-        navigator.addView(DnDTestsView.VIEW_NAME, DnDTestsView.class);
     }
 }

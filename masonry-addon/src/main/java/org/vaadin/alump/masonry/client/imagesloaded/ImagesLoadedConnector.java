@@ -1,4 +1,4 @@
-package org.vaadin.alump.masonry.client;
+package org.vaadin.alump.masonry.client.imagesloaded;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
@@ -10,6 +10,8 @@ import com.vaadin.client.ServerConnector;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
+import org.vaadin.alump.masonry.client.shared.ImagesLoadedServerRpc;
+import org.vaadin.alump.masonry.client.shared.ImagesLoadedState;
 
 import java.util.logging.Logger;
 
@@ -81,7 +83,7 @@ public class ImagesLoadedConnector extends AbstractExtensionConnector {
     /*-{
         var that = this;
         $wnd.imagesLoaded(element, function () {
-            that.@org.vaadin.alump.masonry.client.ImagesLoadedConnector::onImagesLoaded()();
+            that.@org.vaadin.alump.masonry.client.imagesloaded.ImagesLoadedConnector::onImagesLoaded()();
         });
     }-*/;
 

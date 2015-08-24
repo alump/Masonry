@@ -1,4 +1,4 @@
-package org.vaadin.alump.masonry.client;
+package org.vaadin.alump.masonry.client.shared;
 
 import com.vaadin.shared.Connector;
 import com.vaadin.shared.ui.AbstractLayoutState;

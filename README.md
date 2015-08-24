@@ -57,6 +57,7 @@ Another way of debugging client-side is superdev mode. To enable it, uncomment d
 - Valo theme support
 - API to change wrapper style names (issue #10)
 - Masonry library updated to 3.3.1
+- HTML5 Drag'n drop reordering removed as it did not work as well as well as planned. Might need to write own Packery JS library based add-on.
 
 ### Version 0.4.0
 - Renaming DnDMasonryLayout to MasonryDnDWrapper

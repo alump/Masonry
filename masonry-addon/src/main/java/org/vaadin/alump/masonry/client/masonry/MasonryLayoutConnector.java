@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.vaadin.alump.masonry.client;
+package org.vaadin.alump.masonry.client.masonry;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Element;
@@ -33,15 +33,19 @@ import com.vaadin.shared.Connector;
 import com.vaadin.shared.ui.Connect;
 import com.vaadin.shared.ui.LayoutClickRpc;
 import org.vaadin.alump.masonry.MasonryLayout;
+import org.vaadin.alump.masonry.client.imagesloaded.ImagesLoadedClientListener;
+import org.vaadin.alump.masonry.client.shared.MasonryLayoutClientRpc;
+import org.vaadin.alump.masonry.client.shared.MasonryLayoutServerRpc;
+import org.vaadin.alump.masonry.client.shared.MasonryLayoutState;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// Connector binds client-side widget class to server-side component class
-// Connector lives in the client and the @Connect annotation specifies the
-// corresponding server-side component
+/**
+ * Connector for MasonryLayout
+ */
 @Connect(MasonryLayout.class)
 public class MasonryLayoutConnector extends AbstractLayoutConnector implements ImagesLoadedClientListener {
 
