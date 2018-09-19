@@ -1,3 +1,6 @@
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/masonry)
+[![Stars on Vaadin Directory](https://img.shields.io/vaadin-directory/star/masonry.svg)](https://vaadin.com/directory/component/masonry)
+
 # Masonry Add-on for Vaadin 7
 
 Masonry is a cascading grid layout add-on for Vaadin 7.
